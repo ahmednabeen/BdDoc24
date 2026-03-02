@@ -19,48 +19,69 @@
         </div>
 
 
-        <!-- Search Type Tabs -->
+        <!-- ================= SEARCH TYPE TABS ================= -->
         <div class="flex justify-center mb-2">
           <div class="flex bg-white/20 backdrop-blur-sm rounded-xl px-8 py-3 border border-white/30 text-black">
-            <button id="doctorTab" class="px-24 py-3 rounded-lg font-bold bg-card text-black shadow-sm transition" onclick="switchTab('doctor')">
+            
+            <button type="button"
+              id="doctorTab"
+              class="px-24 py-3 rounded-lg font-bold bg-card text-black shadow-sm transition"
+              onclick="switchTab('doctor')">
               <i>Find Doctors</i>
             </button>
-            <button id="hospitalTab" class="px-24 py-3 rounded-lg font-bold text-black hover:text-black transition" onclick="switchTab('hospital')">
+
+            <button type="button"
+              id="hospitalTab"
+              class="px-24 py-3 rounded-lg font-bold text-black hover:text-black transition"
+              onclick="switchTab('hospital')">
               <i>Find Hospitals</i>
             </button>
+
           </div>
         </div>
 
-        <!-- Search Bar Container -->
+
+        <!-- ================= SEARCH BAR CONTAINER ================= -->
         <div class="bg-card rounded-2xl p-4 shadow-xl border border-blue-100 max-w-4xl mx-auto">
-          
-          <!-- Doctor Search Form -->
-          <div id="doctorSearchForm" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <!-- Doctor Name Input -->
+
+          <!-- ===================================================== -->
+          <!-- ================= DOCTOR SEARCH FORM ================= -->
+          <!-- ===================================================== -->
+
+          <form method="GET"
+                action="{% url 'searchdoc' %}"
+                id="doctorSearchForm"
+                class="grid grid-cols-1 md:grid-cols-3 gap-3">
+
+            <!-- Doctor Name -->
             <div class="relative">
               <label for="doctor-name" class="sr-only">Search by doctor name</label>
-              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-              <input type="text" id="doctor-name" placeholder="Search by doctor name" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg placeholder:text-muted focus:outline-none focus:border-accent">
+              <input type="text"
+                    name="name"
+                    id="doctor-name"
+                    placeholder="Search by doctor name"
+                    class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
             </div>
-            
-            <!-- Specialty Select (DYNAMIC) -->
+
+            <!-- Specialty -->
             <div class="relative">
               <label for="specialty-select" class="sr-only">Select Specialty</label>
-              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              <select id="specialty-select" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg appearance-none cursor-pointer focus:outline-none focus:border-accent">
+              <select name="specialty"
+                      id="specialty-select"
+                      class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
                 <option value="">Select Specialty</option>
                 {% for specialty in specialties %}
                   <option value="{{ specialty.slug }}">{{ specialty.name }}</option>
                 {% endfor %}
               </select>
-              <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </div>
-            
-            <!-- City Select (DYNAMIC) -->
+
+            <!-- Location -->
             <div class="relative">
               <label for="doctor-city-select" class="sr-only">Select City</label>
-              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              <select id="doctor-city-select" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg appearance-none cursor-pointer focus:outline-none focus:border-accent">
+              <select name="location"
+                      id="doctor-city-select"
+                      class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
                 <option value="">Select City</option>
                 {% for location in doctor_locations %}
                   {% if location %}
@@ -68,47 +89,85 @@
                   {% endif %}
                 {% endfor %}
               </select>
-              <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </div>
-          </div>
 
-          <!-- Hospital Search Form (Hidden by default) -->
-          <div id="hospitalSearchForm" class="hidden grid grid-cols-1 md:grid-cols-3 gap-3">
-            <!-- NOTE: We can make these dropdowns dynamic later if needed -->
-            <!-- Hospital Name Input -->
+            <!-- Submit Button -->
+            <div class="md:col-span-3 text-center mt-3">
+              <button type="submit"
+                class="w-full md:w-auto px-8 py-3 bg-bccent text-fg font-semibold rounded-xl hover:opacity-90 transition-all active:scale-95 shadow-sm">
+                Search Doctors
+              </button>
+            </div>
+
+          </form>
+
+
+          <!-- ===================================================== -->
+          <!-- ================= HOSPITAL SEARCH FORM =============== -->
+          <!-- ===================================================== -->
+
+          <form method="GET"
+                action="{% url 'searchhos' %}"
+                id="hospitalSearchForm"
+                class="hidden grid grid-cols-1 md:grid-cols-3 gap-3">
+
+            <!-- Hospital Name -->
             <div class="relative">
               <label for="hospital-name" class="sr-only">Hospital name</label>
-              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-              <input type="text" id="hospital-name" placeholder="Hospital name" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg placeholder:text-muted focus:outline-none focus:border-accent">
+              <input type="text"
+                    name="name"
+                    id="hospital-name"
+                    placeholder="Hospital name"
+                    value="{{ request.GET.name|default_if_none:'' }}"
+                    class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
             </div>
-            <!-- Division Select -->
+
+            <!-- Division -->
             <div class="relative">
               <label for="division-select" class="sr-only">Select Division</label>
-              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
-              <select id="division-select" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg appearance-none cursor-pointer focus:outline-none focus:border-accent">
-                <option>Select Division</option>
-                <option>Dhaka</option>
-                <option>Chattogram</option>
+              <select name="division"
+                      id="division-select"
+                      class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+                <option value="">Select Division</option>
+                <option value="Dhaka"
+                  {% if request.GET.division == "Dhaka" %}selected{% endif %}>
+                  Dhaka
+                </option>
+                <option value="Chattogram"
+                  {% if request.GET.division == "Chattogram" %}selected{% endif %}>
+                  Chattogram
+                </option>
               </select>
-              <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </div>
-            <!-- District Select -->
+
+            <!-- District -->
             <div class="relative">
               <label for="district-select" class="sr-only">Select District</label>
-              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
-              <select id="district-select" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg appearance-none cursor-pointer focus:outline-none focus:border-accent">
-                <option>Select District</option>
-              </select>
-              <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-            </div>
-          </div>
+              <select name="district"
+                      id="district-select"
+                      class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
 
-          <!-- Search Button -->
-          <div class="mt-4 text-center">
-            <button id="searchButton" class="w-full md:w-auto px-8 py-3 bg-bccent text-fg font-semibold rounded-xl hover:opacity-90 transition-all active:scale-95 shadow-sm">
-              Search Doctors
-            </button>
-          </div>
+                <option value="">Select District</option>
+
+                {% if request.GET.district %}
+                  <option value="{{ request.GET.district }}" selected>
+                    {{ request.GET.district }}
+                  </option>
+                {% endif %}
+
+              </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="md:col-span-3 text-center mt-3">
+              <button type="submit"
+                      class="w-full md:w-auto px-8 py-3 bg-bccent text-fg font-semibold rounded-xl hover:opacity-90 transition-all active:scale-95 shadow-sm">
+                Search Hospitals
+              </button>
+            </div>
+
+          </form>
+
         </div> 
       </div>
     </section>
@@ -120,7 +179,7 @@
         
         <!-- Filter Bar (Mobile Horizontal Scroll) -->
         <div class="flex items-center justify-between mb-8 overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
-          <p class="text-muted text-sm whitespace-nowrap mr-4">Showing <span class="font-semibold text-fg">24</span> results</p>
+          <p class="text-muted text-sm whitespace-nowrap mr-4">Showing <span class="font-semibold text-fg">{{ hospitals|length }}</span> results</p>
           
           <!-- Sort By -->
           <div class="flex items-center gap-2">
@@ -135,175 +194,122 @@
 
         <!-- Hospital Cards Grid (3 Columns) -->
         <div id="hospitalGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          
-          <!-- Hospital Card 1 -->
-          <div class="hospital-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover group dhaka flex flex-col">
-            <div class="h-60 overflow-hidden flex-shrink-0">
-              <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=600&h=400&fit=crop" alt="Square Hospital" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            </div>
-            <div class="p-6 flex flex-col flex-grow">
-              <div class="flex-grow">
-                <h3 class="font-display font-bold text-xl text-fg mb-1">Square Hospital Ltd</h3>
-                <p class="text-muted text-sm flex items-center gap-1 mb-3">
-                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                  <span>West Panthapath, Dhaka</span>
-                </p>
-                <div class="flex items-center gap-4 mb-4">
-                  <div class="flex items-center gap-1">
-                    <svg class="w-5 h-5 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    <span class="font-semibold text-fg">4.8</span>
-                  </div>
-                </div>
-              </div>
+
+          {% if hospitals %}
+            {% for hospital in page_obj %}
+            
+            <div class="hospital-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover group flex flex-col">
               
-              <!-- Button stays at bottom -->
-              <a href="#" class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">View Details</a>
-            </div>
-          </div>
-
-          <!-- Hospital Card 2 -->
-          <div class="hospital-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover group dhaka flex flex-col">
-            <div class="h-60 overflow-hidden flex-shrink-0">
-              <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&h=400&fit=crop" alt="Apollo Hospital" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            </div>
-            <div class="p-6 flex flex-col flex-grow">
-              <div class="flex-grow">
-                <h3 class="font-display font-bold text-xl text-fg mb-1">Apollo Hospitals Dhaka</h3>
-                <p class="text-muted text-sm flex items-center gap-1 mb-3">
-                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                  <span>Bashundhara R/A, Dhaka</span>
-                </p>
-                <div class="flex items-center gap-4 mb-4">
-                  <div class="flex items-center gap-1">
-                    <svg class="w-5 h-5 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    <span class="font-semibold text-fg">4.9</span>
-                  </div>
-                </div>
+              <div class="h-60 overflow-hidden flex-shrink-0">
+                {% if hospital.image %}
+                  <img src="{{ hospital.image.url }}"
+                      alt="{{ hospital.name }}"
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                {% else %}
+                  <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=600&h=400&fit=crop"
+                      alt="{{ hospital.name }}"
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                {% endif %}
               </div>
-              <a href="#" class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">View Details</a>
-            </div>
-          </div>
 
-          <!-- Hospital Card 3 -->
-          <div class="hospital-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover group chattogram flex flex-col">
-            <div class="h-60 overflow-hidden flex-shrink-0">
-              <img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=600&h=400&fit=crop" alt="Max Hospital" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            </div>
-            <div class="p-6 flex flex-col flex-grow">
-              <div class="flex-grow">
-                <h3 class="font-display font-bold text-xl text-fg mb-1">Max Hospital & Diagnostic</h3>
-                <p class="text-muted text-sm flex items-center gap-1 mb-3">
-                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                  <span>Agrabad, Chattogram</span>
-                </p>
-                <div class="flex items-center gap-4 mb-4">
-                  <div class="flex items-center gap-1">
-                    <svg class="w-5 h-5 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    <span class="font-semibold text-fg">4.5</span>
-                  </div>
-                </div>
-              </div>
-              <a href="#" class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">View Details</a>
-            </div>
-          </div>
+              <div class="p-6 flex flex-col flex-grow">
+                <div class="flex-grow">
 
-          <!-- Hospital Card 4 -->
-          <div class="hospital-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover group dhaka flex flex-col">
-            <div class="h-60 overflow-hidden flex-shrink-0">
-              <img src="https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=600&h=400&fit=crop" alt="United Hospital" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            </div>
-            <div class="p-6 flex flex-col flex-grow">
-              <div class="flex-grow">
-                <h3 class="font-display font-bold text-xl text-fg mb-1">United Hospital Limited</h3>
-                <p class="text-muted text-sm flex items-center gap-1 mb-3">
-                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                  <span>Gulshan-2, Dhaka</span>
-                </p>
-                <div class="flex items-center gap-4 mb-4">
-                  <div class="flex items-center gap-1">
-                    <svg class="w-5 h-5 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    <span class="font-semibold text-fg">4.7</span>
-                  </div>
-                </div>
-              </div>
-              <a href="#" class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">View Details</a>
-            </div>
-          </div>
+                  <h3 class="font-display font-bold text-xl text-fg mb-1">
+                    {{ hospital.name }}
+                  </h3>
 
-          <!-- Hospital Card 5 -->
-          <div class="hospital-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover group sylhet flex flex-col">
-            <div class="h-60 overflow-hidden flex-shrink-0">
-              <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?w=600&h=400&fit=crop" alt="Mount Adora" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            </div>
-            <div class="p-6 flex flex-col flex-grow">
-              <div class="flex-grow">
-                <h3 class="font-display font-bold text-xl text-fg mb-1">Mount Adora Hospital</h3>
-                <p class="text-muted text-sm flex items-center gap-1 mb-3">
-                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                  <span>South Surma, Sylhet</span>
-                </p>
-                <div class="flex items-center gap-4 mb-4">
-                  <div class="flex items-center gap-1">
-                    <svg class="w-5 h-5 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    <span class="font-semibold text-fg">4.6</span>
-                  </div>
-                </div>
-              </div>
-              <a href="#" class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">View Details</a>
-            </div>
-          </div>
+                  <p class="text-muted text-sm flex items-center gap-1 mb-3">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span>{{ hospital.location }}</span>
+                  </p>
 
-          <!-- Hospital Card 6 -->
-          <div class="hospital-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover group dhaka flex flex-col">
-            <div class="h-60 overflow-hidden flex-shrink-0">
-              <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&h=400&fit=crop" alt="Labaid Hospital" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            </div>
-            <div class="p-6 flex flex-col flex-grow">
-              <div class="flex-grow">
-                <h3 class="font-display font-bold text-xl text-fg mb-1">Labaid Hospital</h3>
-                <p class="text-muted text-sm flex items-center gap-1 mb-3">
-                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                  <span>Dhanmondi, Dhaka</span>
-                </p>
-                <div class="flex items-center gap-4 mb-4">
-                  <div class="flex items-center gap-1">
-                    <svg class="w-5 h-5 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    <span class="font-semibold text-fg">4.4</span>
-                  </div>
                 </div>
+
+                <!-- Button -->
+                <a href="{% url 'hospital_detail' hospital.id %}"
+                  class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">
+                  View Details
+                </a>
+
               </div>
-              <a href="#" class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">View Details</a>
             </div>
-          </div>
+
+            {% endfor %}
+          {% else %}
+            <p class="col-span-3 text-center text-muted mt-8">
+              No hospitals found matching your criteria.
+            </p>
+          {% endif %}
 
         </div>
 
         <!-- Pagination -->
+        {% if page_obj.paginator.num_pages > 1 %}
         <nav class="flex flex-col sm:flex-row justify-center items-center mt-16 gap-4" aria-label="Pagination">
-          <span class="px-6 py-3 bg-card border border-border rounded-xl text-muted font-semibold cursor-not-allowed flex items-center gap-2 opacity-50">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            Previous
-          </span>
 
+          <!-- Previous Button -->
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"
+              class="px-6 py-3 bg-card border border-border rounded-xl text-fg font-semibold flex items-center gap-2 hover:border-accent hover:text-accent transition-all">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Previous
+            </a>
+          {% else %}
+            <span class="px-6 py-3 bg-card border border-border rounded-xl text-muted font-semibold cursor-not-allowed flex items-center gap-2 opacity-50">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Previous
+            </span>
+          {% endif %}
+
+          <!-- Page Numbers -->
           <div class="flex items-center gap-2">
-            <span class="px-4 py-2 bg-accent text-white rounded-lg font-bold border border-accent">1</span>
-            <a href="#" class="px-4 py-2 bg-card border border-border rounded-lg text-fg font-medium hover:border-accent hover:text-accent transition-all">2</a>
-            <a href="#" class="px-4 py-2 bg-card border border-border rounded-lg text-fg font-medium hover:border-accent hover:text-accent transition-all">3</a>
-            <span class="px-4 py-2 text-muted">...</span>
-            <a href="#" class="px-4 py-2 bg-card border border-border rounded-lg text-fg font-medium hover:border-accent hover:text-accent transition-all">10</a>
+            {% for num in page_obj.paginator.page_range %}
+              
+              {% if page_obj.number == num %}
+                <span class="px-4 py-2 bg-accent text-white rounded-lg font-bold border border-accent">
+                  {{ num }}
+                </span>
+              {% else %}
+                <a href="?page={{ num }}"
+                  class="px-4 py-2 bg-card border border-border rounded-lg text-fg font-medium hover:border-accent hover:text-accent transition-all">
+                  {{ num }}
+                </a>
+              {% endif %}
+            
+            {% endfor %}
           </div>
 
-          <a href="#" class="px-6 py-3 bg-accent text-white rounded-xl font-semibold transition-all flex items-center gap-2 shadow-sm">
-            Next
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
+          <!-- Next Button -->
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"
+              class="px-6 py-3 bg-accent text-white rounded-xl font-semibold transition-all flex items-center gap-2 shadow-sm">
+              Next
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          {% endif %}
+
         </nav>
+
         <p class="text-center text-muted text-sm mt-4">
-          Showing page 1 of 10
+          Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
         </p>
+        {% endif %}
 
       </div>
     </section>
+
   </main>
 
 {% endblock %}
