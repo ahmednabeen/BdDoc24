@@ -71,5 +71,9 @@ def hospital_single(request):
 def hospital_detail(request):
     return render(request, 'myapp/hospital_detail.html')
 
-def search(request):
-    return render(request, 'myapp/search_page.html')
+def searchdoc(request):
+    return render(request, 'myapp/search_page_doc.html')
+
+def searchhos(request):
+    return render(request, 'myapp/search_page_hos.html')
+

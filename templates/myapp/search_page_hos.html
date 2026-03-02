@@ -1,35 +1,136 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
 
   <!-- Main Content -->
   <main class="pt-16 bg-bg">
     
-    <!-- Hero Header Section (Matches Index Style) -->
-    <section class="relative hero-gradient overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24">
+    <!-- Search Header Section -->
+    <section class="relative hero-gradient overflow-hidden pt-24 pb-8 sm:pt-28 sm:pb-10">
       <div class="blob-1"></div>
       <div class="blob-2"></div>
       
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="font-display font-bold text-4xl sm:text-5xl text-slate-900 mb-4">
-          Leading <span class="gradient-text">Hospitals</span>
-        </h1>
-        <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-          Find the best healthcare facilities near you with modern equipment and expert medical staff.
-        </p>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8">
+          <h1 class="font-display font-bold text-3xl sm:text-4xl text-slate-900 mb-2">
+            Find Your <span class="gradient-text">Hospital</span>
+          </h1>
+          <p class="text-slate-600">Find the right hospital for your needs</p>
+        </div>
+
+
+        <!-- Search Type Tabs -->
+        <div class="flex justify-center mb-2">
+          <div class="flex bg-white/20 backdrop-blur-sm rounded-xl px-8 py-3 border border-white/30 text-black">
+            <button id="doctorTab" class="px-24 py-3 rounded-lg font-bold bg-card text-black shadow-sm transition" onclick="switchTab('doctor')">
+              <i>Find Doctors</i>
+            </button>
+            <button id="hospitalTab" class="px-24 py-3 rounded-lg font-bold text-black hover:text-black transition" onclick="switchTab('hospital')">
+              <i>Find Hospitals</i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search Bar Container -->
+        <div class="bg-card rounded-2xl p-4 shadow-xl border border-blue-100 max-w-4xl mx-auto">
+          
+          <!-- Doctor Search Form -->
+          <div id="doctorSearchForm" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <!-- Doctor Name Input -->
+            <div class="relative">
+              <label for="doctor-name" class="sr-only">Search by doctor name</label>
+              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="doctor-name" placeholder="Search by doctor name" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg placeholder:text-muted focus:outline-none focus:border-accent">
+            </div>
+            
+            <!-- Specialty Select (DYNAMIC) -->
+            <div class="relative">
+              <label for="specialty-select" class="sr-only">Select Specialty</label>
+              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <select id="specialty-select" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg appearance-none cursor-pointer focus:outline-none focus:border-accent">
+                <option value="">Select Specialty</option>
+                {% for specialty in specialties %}
+                  <option value="{{ specialty.slug }}">{{ specialty.name }}</option>
+                {% endfor %}
+              </select>
+              <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            
+            <!-- City Select (DYNAMIC) -->
+            <div class="relative">
+              <label for="doctor-city-select" class="sr-only">Select City</label>
+              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <select id="doctor-city-select" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg appearance-none cursor-pointer focus:outline-none focus:border-accent">
+                <option value="">Select City</option>
+                {% for location in doctor_locations %}
+                  {% if location %}
+                    <option value="{{ location }}">{{ location }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+              <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+          </div>
+
+          <!-- Hospital Search Form (Hidden by default) -->
+          <div id="hospitalSearchForm" class="hidden grid grid-cols-1 md:grid-cols-3 gap-3">
+            <!-- NOTE: We can make these dropdowns dynamic later if needed -->
+            <!-- Hospital Name Input -->
+            <div class="relative">
+              <label for="hospital-name" class="sr-only">Hospital name</label>
+              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              <input type="text" id="hospital-name" placeholder="Hospital name" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg placeholder:text-muted focus:outline-none focus:border-accent">
+            </div>
+            <!-- Division Select -->
+            <div class="relative">
+              <label for="division-select" class="sr-only">Select Division</label>
+              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+              <select id="division-select" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg appearance-none cursor-pointer focus:outline-none focus:border-accent">
+                <option>Select Division</option>
+                <option>Dhaka</option>
+                <option>Chattogram</option>
+              </select>
+              <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <!-- District Select -->
+            <div class="relative">
+              <label for="district-select" class="sr-only">Select District</label>
+              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+              <select id="district-select" class="w-full pl-12 pr-4 py-3 rounded-xl bg-bg border border-border text-fg appearance-none cursor-pointer focus:outline-none focus:border-accent">
+                <option>Select District</option>
+              </select>
+              <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+          </div>
+
+          <!-- Search Button -->
+          <div class="mt-4 text-center">
+            <button id="searchButton" class="w-full md:w-auto px-8 py-3 bg-bccent text-fg font-semibold rounded-xl hover:opacity-90 transition-all active:scale-95 shadow-sm">
+              Search Doctors
+            </button>
+          </div>
+        </div> 
       </div>
     </section>
 
-    <!-- Hospitals List Section -->
-    <section class="py-12 sm:py-16">
+
+    <!-- Results Section -->
+    <section class="py-8 sm:py-12">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Location Filter Tabs -->
-        <div class="flex flex-wrap justify-center gap-2 mb-12">
-          <button class="specialty-tab active px-5 py-2.5 rounded-full border border-border font-medium text-sm" onclick="filterHospitals('all')">All</button>
-          <button class="specialty-tab px-5 py-2.5 rounded-full border border-border font-medium text-sm text-muted" onclick="filterHospitals('dhaka')">Dhaka</button>
-          <button class="specialty-tab px-5 py-2.5 rounded-full border border-border font-medium text-sm text-muted" onclick="filterHospitals('chattogram')">Chattogram</button>
-          <button class="specialty-tab px-5 py-2.5 rounded-full border border-border font-medium text-sm text-muted" onclick="filterHospitals('sylhet')">Sylhet</button>
+        <!-- Filter Bar (Mobile Horizontal Scroll) -->
+        <div class="flex items-center justify-between mb-8 overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
+          <p class="text-muted text-sm whitespace-nowrap mr-4">Showing <span class="font-semibold text-fg">24</span> results</p>
+          
+          <!-- Sort By -->
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-muted hidden sm:block">Sort by:</span>
+            <select class="bg-card border border-border text-fg text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-accent cursor-pointer">
+              <option>Relevance</option>
+              <option>Rating: High to Low</option>
+              <option>Experience: High to Low</option>
+            </select>
+          </div>
         </div>
 
         <!-- Hospital Cards Grid (3 Columns) -->
@@ -177,7 +278,7 @@
 
         </div>
 
-        <!-- Pagination  -->
+        <!-- Pagination -->
         <nav class="flex flex-col sm:flex-row justify-center items-center mt-16 gap-4" aria-label="Pagination">
           <span class="px-6 py-3 bg-card border border-border rounded-xl text-muted font-semibold cursor-not-allowed flex items-center gap-2 opacity-50">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -206,3 +307,4 @@
   </main>
 
 {% endblock %}
+
