@@ -39,8 +39,8 @@ class DoctorAdmin(admin.ModelAdmin):
     Admin configuration for the Doctor model.
     This is the main interface for managing doctors.
     """
-    list_display = ('name', 'designation', 'hospital', 'experience_years', 'slug', 'location')
-    list_filter = ('hospital', 'specialties')
+    list_display = ('name', 'designation', 'hospital', 'experience_years', 'slug', 'is_featured', 'location')
+    list_filter = ('hospital', 'specialties', 'is_featured',)
     search_fields = ('name', 'designation', 'specialties__name')
     
     # The 'slug' is auto-generated, so it should be read-only in the admin.
@@ -57,6 +57,9 @@ class DoctorAdmin(admin.ModelAdmin):
         }),
         ('Professional Details', {
             'fields': ('about', 'qualifications', 'experience_years', 'specialties', 'hospital',)
+        }),
+        ('Settings', {
+            'fields': ('is_featured', 'slug',) # Also good to show the readonly slug here
         }),
     )
     

@@ -43,27 +43,26 @@ class Hospital(models.Model):
 class Doctor(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=200, null=True, blank=True)
-    designation = models.CharField(max_length=100) # e.g., "Senior Cardiologist"
+    designation = models.CharField(max_length=100) 
     profile_picture = models.ImageField(upload_to='doctors/', null=True, blank=True)
-    qualifications = models.CharField(max_length=255) # e.g., "MBBS, FCPS (Cardiology)"
+    qualifications = models.CharField(max_length=255) 
     experience_years = models.PositiveIntegerField(null=True, blank=True)
     about = models.TextField()
-    specialties = models.ManyToManyField(Specialty,null=True, blank=True)
+    specialties = models.ManyToManyField(Specialty, blank=True)
     hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, help_text="Unique URL-friendly identifier for the doctor.")
-
-    is_featured = models.BooleanField(default=False)  # ✅ Newly ADD THIS
+    is_featured = models.BooleanField(default=False)  
 
 
     def __str__(self):
         return self.name
     
     def save(self, *args, **kwargs):
-        is_new = self._state.adding
-        super().save(*args, **kwargs)
-        if is_new or not self.slug:
+        if not self.slug:
+            super().save(*args, **kwargs)  # Get PK first
             self.slug = f"{slugify(self.name)}-{self.pk}"
-            super(Doctor, self).save(update_fields=['slug'])
+            return super().save(update_fields=['slug'])
+        return super().save(*args, **kwargs)
             
     def get_profile_picture_url(self):
         """Return the uploaded profile picture URL, or a default static image if none exists."""

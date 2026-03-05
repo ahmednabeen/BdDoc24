@@ -198,11 +198,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
         <div>
-          <h2 class="font-display font-bold text-3xl sm:text-4xl text-fg mb-2">Top Rated Doctors</h2>
+          <h2 class="font-display font-bold text-3xl sm:text-4xl text-fg mb-2">Featured Doctors</h2>
           <p class="text-muted text-lg">Highly recommended by patients across Bangladesh</p>
         </div>
         <div class="text-center mt-12">
-          <a href="#" class="px-8 py-4 border-2 border-border bg-bccent text-fg font-semibold rounded-xl hover:border-accent hover:text-accent transition-all">
+          <a href="{% url 'all_doctors' %}" class="px-8 py-4 border-2 border-border bg-bccent text-fg font-semibold rounded-xl hover:border-accent hover:text-accent transition-all">
             View all doctors
           </a>
         </div>
@@ -236,14 +236,20 @@
                 {% else %}
                   <p class="text-muted text-sm mt-1 truncate">{{ doctor.location }}</p>
                 {% endif %}
+                
+                <!-- Corrected Review and Rating Display Logic -->
                 <div class="flex items-center gap-1 mt-2">
-                  <svg class="w-4 h-4 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                  <span class="text-sm font-medium text-fg">{{ doctor.avg_rating|floatformat:1|default:"N/A" }}</span>
-                  <span class="text-sm text-muted">({{ doctor.review_count }} reviews)</span>
+                  {% if doctor.review_count > 0 %}
+                    <svg class="w-4 h-4 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <span class="text-sm font-medium text-fg">{{ doctor.avg_rating|floatformat:1 }}</span>
+                    <span class="text-sm text-muted">({{ doctor.review_count }} review{{ doctor.review_count|pluralize }})</span>
+                  {% else %}
+                    <span class="text-sm text-muted">No reviews yet</span>
+                  {% endif %}
                 </div>
               </div>
             </div>
-            <a href="{% url 'doctor_single' %}?id={{ doctor.slug }}" class="block w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center">View Details</a>
+            <a href="{% url 'doctor_single' doctor.slug %}" class="block w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center">View Details</a>
           </div>
         </div>
         {% empty %}
@@ -253,6 +259,7 @@
       </div>
     </div>
   </section>
+
 
 
   <!-- Hospitals Section -->
@@ -308,7 +315,6 @@
     </div>
   </section>
 
-
   <!-- Specialties Section -->
   <section id="specialties" class="py-16 sm:py-24 bg-bg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -322,7 +328,8 @@
         
         {% for specialty in specialties_with_counts %}
         <!-- Specialty Card -->
-        <a href="#" class="stagger-reveal bg-card rounded-xl p-5 border border-border card-hover text-center group">
+        <!-- FIX: The href now points to the search page with the correct specialty filter -->
+        <a href="{% url 'searchdoc' %}?specialty={{ specialty.slug }}" class="stagger-reveal bg-card rounded-xl p-5 border border-border card-hover text-center group">
           <div class="w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br from-emerald-700/10 to-emerald-900/10 flex items-center justify-center group-hover:from-accent/20 group-hover:to-accent/10 transition-all">
             <!-- Using a default icon for all. You could add an icon field to your Specialty model later. -->
             <svg class="w-6 h-6 text-emerald-700 group-hover:text-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
