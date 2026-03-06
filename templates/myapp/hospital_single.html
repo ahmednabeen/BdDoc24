@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <main>
@@ -10,49 +11,46 @@
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="bg-card rounded-3xl shadow-xl p-6 sm:p-10 border border-border">
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+          
+          <!-- DYNAMIC Hospital Image -->
           <div class="lg:col-span-3">
             <div class="rounded-2xl overflow-hidden border border-border shadow-md">
-              <img 
-                src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=1200&auto=format&fit=crop" 
-                alt="Apollo Hospitals Dhaka" 
-                class="w-full h-64 sm:h-80 lg:h-[26rem] object-cover"
-              >
+              {% if hospital.image %}
+                <img src="{{ hospital.image.url }}" alt="{{ hospital.name }}" class="w-full h-64 sm:h-80 lg:h-[26rem] object-cover">
+              {% else %}
+                <img src="{% static 'images/default_hospital.jpg' %}" alt="Default hospital image" class="w-full h-64 sm:h-80 lg:h-[26rem] object-cover">
+              {% endif %}
             </div>
           </div>
 
           <div class="lg:col-span-2">
+            <!-- DYNAMIC Hospital Name -->
             <h1 class="font-display font-bold text-3xl sm:text-4xl text-fg mb-4">
-              Apollo Hospitals Dhaka
+              {{ hospital.name }}
             </h1>
-            <p class="text-muted mb-6 leading-relaxed">
-              A leading multi-specialty tertiary care hospital delivering international-standard healthcare with advanced technology and expert professionals.
-            </p>
-
+            
+            <!-- DYNAMIC Address and Contact -->
             <div class="space-y-4 text-muted">
-              <div class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-accentstrong" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-accentstrong flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
-                <span>Plot-81, Block-E, Bashundhara R/A, Dhaka-1229</span>
+                <span>{{ hospital.address }}</span>
               </div>
-              <div class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-accentstrong" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {% if hospital.contact_numbers %}
+              <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-accentstrong flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                 </svg>
-                <span>10678 (Hotline) • 02-8431661-5</span>
+                <span>{{ hospital.contact_numbers }}</span>
               </div>
+              {% endif %}
             </div>
 
-            <div class="flex flex-wrap gap-3 mt-6">
-              <span class="bg-blue-100 text-accentstrong px-4 py-1.5 rounded-full text-sm font-medium">Multi-Specialty</span>
-              <span class="bg-blue-100 text-accentstrong px-4 py-1.5 rounded-full text-sm font-medium">Advanced Diagnostics</span>
-              <span class="bg-blue-100 text-accentstrong px-4 py-1.5 rounded-full text-sm font-medium">24/7 Emergency</span>
-            </div>
-
+            <!-- DYNAMIC Google Maps Link -->
             <div class="mt-8 flex flex-col sm:flex-row gap-4">
-              
-              <a href="#" class="flex-1 border-2 border-border text-fg font-semibold py-3 px-6 rounded-xl text-center hover:border-accent hover:text-accent transition">
+              <a href="https://www.google.com/maps/search/?api=1&query={{ hospital.name|urlencode }},{{ hospital.address|urlencode }}" target="_blank" class="flex-1 border-2 border-border text-fg font-semibold py-3 px-6 rounded-xl text-center hover:border-accent hover:text-accent transition">
                 Get Directions
               </a>
             </div>
@@ -66,257 +64,70 @@
   <section class="py-16 sm:py-20 bg-bg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
 
-      <!-- Overview -->
-      <div class="bg-card rounded-2xl shadow-xl border border-border p-6 sm:p-10 card-hover">
-        <h2 class="font-display font-bold text-2xl sm:text-3xl text-fg mb-6">Overview</h2>
-        <p class="text-muted leading-relaxed mb-6">
-          Apollo Hospitals Dhaka is a prominent tertiary care facility offering comprehensive medical services with modern infrastructure and a patient-first approach. 
-          It combines advanced medical technology with experienced consultants to deliver high-quality, compassionate care across multiple specialties.
-        </p>
-        <h3 class="font-semibold text-xl text-fg mb-4">Key Highlights</h3>
-        <ul class="space-y-3 text-muted">
-          <li class="flex items-start"><i class="fas fa-check-circle text-accent mr-3 mt-1 text-lg"></i>Committed to international quality standards</li>
-          <li class="flex items-start"><i class="fas fa-check-circle text-accent mr-3 mt-1 text-lg"></i>Experienced team of consultants and support staff</li>
-          <li class="flex items-start"><i class="fas fa-check-circle text-accent mr-3 mt-1 text-lg"></i>Focus on patient safety and positive outcomes</li>
-        </ul>
-      </div>
-
-      <!-- Facilities -->
+      <!-- DYNAMIC Facilities -->
       <div class="bg-card rounded-2xl shadow-xl border border-border p-6 sm:p-10 card-hover">
         <h2 class="font-display font-bold text-2xl sm:text-3xl text-fg mb-6">Facilities</h2>
         
+        {% if hospital.diagnosis %}
         <div class="mb-8">
           <h3 class="font-semibold text-xl text-fg mb-4">Diagnosis Facility</h3>
-          <ul class="space-y-3 text-muted">
-            <li class="flex items-start">
-              <i class="fas fa-check-circle text-accent mr-3 mt-1 text-lg"></i>
-              <span>State-of-the-art diagnostic & therapeutic technology</span>
-            </li>
-            <li class="flex items-start">
-              <i class="fas fa-check-circle text-accent mr-3 mt-1 text-lg"></i>
-              <span>24/7 Emergency, ICU, CCU, NICU & Critical Care service</span>
-            </li>
-          </ul>
+          <div class="prose prose-sm text-muted max-w-none">
+            {{ hospital.diagnosis|linebreaks }}
+          </div>
         </div>
+        {% endif %}
 
+        {% if hospital.facilities %}
         <div>
-          <h3 class="font-semibold text-xl text-fg mb-4">Hospital Facility</h3>
-          <ul class="space-y-3 text-muted">
-            <li class="flex items-start">
-              <i class="fas fa-check-circle text-accent mr-3 mt-1 text-lg"></i>
-              <span>Multi-disciplinary super-specialty departments</span>
-            </li>
-            <li class="flex items-start">
-              <i class="fas fa-check-circle text-accent mr-3 mt-1 text-lg"></i>
-              <span>Patient-centric environment with international quality standards</span>
-            </li>
-          </ul>
+          <h3 class="font-semibold text-xl text-fg mb-4">Other Facilities</h3>
+          <div class="prose prose-sm text-muted max-w-none">
+            {{ hospital.facilities|linebreaks }}
+          </div>
         </div>
+        {% endif %}
       </div>
 
-      <!-- Our Doctors - Now using your index.html style cards -->
+      <!-- DYNAMIC Doctors List -->
       <div class="bg-card rounded-2xl shadow-xl border border-border p-6 sm:p-10 card-hover">
         <h2 class="font-display font-bold text-2xl sm:text-3xl text-fg mb-8">Our Doctors</h2>
         
         <div id="doctorGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           
-          <!-- Card 1 -->
-          <div class="doctor-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover">
+          {% for doctor in doctors %}
+          <!-- Doctor Card (Loop Item ) -->
+          <div class="doctor-card stagger-reveal bg-bg rounded-2xl overflow-hidden border border-border card-hover">
             <div class="p-6">
               <div class="flex gap-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&h=300&fit=crop&crop=face" 
-                  alt="Dr. Ahmed Hassan" 
-                  class="w-20 h-20 rounded-xl object-cover flex-shrink-0"
-                >
+                <img src="{{ doctor.get_profile_picture_url }}" alt="Dr. {{ doctor.name }}" class="w-20 h-20 rounded-xl object-cover flex-shrink-0">
                 <div class="flex-1 min-w-0">
                   <div class="flex items-start justify-between gap-2">
-                    <h3 class="font-display font-semibold text-lg text-fg truncate">Dr. Ahmed Hassan</h3>
-                    <span class="flex-shrink-0 w-2 h-2 rounded-full bg-green-500 mt-2"></span>
+                    <h3 class="font-display font-semibold text-lg text-fg truncate">{{ doctor.name }}</h3>
+                    <span class="flex-shrink-0 w-2 h-2 rounded-full bg-green-500 mt-2" title="Online"></span>
                   </div>
-                  <p class="text-accentstrong font-medium text-sm">Cardiologist</p>
-                  <p class="text-muted text-sm mt-1 truncate">Apollo Hospitals Dhaka</p>
+                  <p class="text-accentstrong font-medium text-sm">{{ doctor.specialties.all|join:", " }}</p>
+                  <p class="text-muted text-sm mt-1 truncate">{{ doctor.hospital.name }}</p>
                   <div class="flex items-center gap-1 mt-2">
-                    <svg class="w-4 h-4 rating-star" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                    <span class="text-sm font-medium text-fg">4.8</span>
-                    <span class="text-sm text-muted">(278 reviews)</span>
+                    {% if doctor.review_count > 0 %}
+                      <svg class="w-4 h-4 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                      <span class="text-sm font-medium text-fg">{{ doctor.avg_rating|floatformat:1 }}</span>
+                      <span class="text-sm text-muted">({{ doctor.review_count }} review{{ doctor.review_count|pluralize }})</span>
+                    {% else %}
+                      <span class="text-sm text-muted">No reviews yet</span>
+                    {% endif %}
                   </div>
                 </div>
               </div>
-              <button class="w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98]">
-                View Detail
-              </button>
+              <a href="{% url 'doctor_single' doctor.slug %}" class="block w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center">View Details</a>
             </div>
           </div>
+          {% empty %}
+            <p class="col-span-full text-center text-muted py-12">No doctors are currently listed for this hospital.</p>
+          {% endfor %}
 
-          <!-- Card 2 -->
-          <div class="doctor-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover">
-            <div class="p-6">
-              <div class="flex gap-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=300&h=300&fit=crop&crop=face" 
-                  alt="Dr. Fatema Rahman" 
-                  class="w-20 h-20 rounded-xl object-cover flex-shrink-0"
-                >
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-start justify-between gap-2">
-                    <h3 class="font-display font-semibold text-lg text-fg truncate">Dr. Fatema Rahman</h3>
-                    <span class="flex-shrink-0 w-2 h-2 rounded-full bg-green-500 mt-2"></span>
-                  </div>
-                  <p class="text-accentstrong font-medium text-sm">Neurologist</p>
-                  <p class="text-muted text-sm mt-1 truncate">Apollo Hospitals Dhaka</p>
-                  <div class="flex items-center gap-1 mt-2">
-                    <svg class="w-4 h-4 rating-star" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                    <span class="text-sm font-medium text-fg">5.0</span>
-                    <span class="text-sm text-muted">(412 reviews)</span>
-                  </div>
-                </div>
-              </div>
-              <button class="w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98]">
-                View Detail
-              </button>
-            </div>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="doctor-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover">
-            <div class="p-6">
-              <div class="flex gap-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=300&h=300&fit=crop&crop=face" 
-                  alt="Dr. Kamal Hossain" 
-                  class="w-20 h-20 rounded-xl object-cover flex-shrink-0"
-                >
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-start justify-between gap-2">
-                    <h3 class="font-display font-semibold text-lg text-fg truncate">Dr. Kamal Hossain</h3>
-                    <span class="flex-shrink-0 w-2 h-2 rounded-full bg-green-500 mt-2"></span>
-                  </div>
-                  <p class="text-accentstrong font-medium text-sm">Orthopedic Surgeon</p>
-                  <p class="text-muted text-sm mt-1 truncate">Apollo Hospitals Dhaka</p>
-                  <div class="flex items-center gap-1 mt-2">
-                    <svg class="w-4 h-4 rating-star" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                    <span class="text-sm font-medium text-fg">4.5</span>
-                    <span class="text-sm text-muted">(189 reviews)</span>
-                  </div>
-                </div>
-              </div>
-              <button class="w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98]">
-                View Detail
-              </button>
-            </div>
-          </div>
-
-          <!-- Card 4 -->
-          <div class="doctor-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover">
-            <div class="p-6">
-              <div class="flex gap-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=300&h=300&fit=crop&crop=face" 
-                  alt="Dr. Sabrina Akter" 
-                  class="w-20 h-20 rounded-xl object-cover flex-shrink-0"
-                >
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-start justify-between gap-2">
-                    <h3 class="font-display font-semibold text-lg text-fg truncate">Dr. Sabrina Akter</h3>
-                    <span class="flex-shrink-0 w-2 h-2 rounded-full bg-green-500 mt-2"></span>
-                  </div>
-                  <p class="text-accentstrong font-medium text-sm">Pediatrician</p>
-                  <p class="text-muted text-sm mt-1 truncate">Apollo Hospitals Dhaka</p>
-                  <div class="flex items-center gap-1 mt-2">
-                    <svg class="w-4 h-4 rating-star" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                    <span class="text-sm font-medium text-fg">4.7</span>
-                    <span class="text-sm text-muted">(321 reviews)</span>
-                  </div>
-                </div>
-              </div>
-              <button class="w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98]">
-                View Detail
-              </button>
-            </div>
-          </div>
-
-          <!-- Card 5 -->
-          <div class="doctor-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover">
-            <div class="p-6">
-              <div class="flex gap-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=300&h=300&fit=crop&crop=face" 
-                  alt="Dr. Rahman Chowdhury" 
-                  class="w-20 h-20 rounded-xl object-cover flex-shrink-0"
-                >
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-start justify-between gap-2">
-                    <h3 class="font-display font-semibold text-lg text-fg truncate">Dr. Rahman Chowdhury</h3>
-                    <span class="flex-shrink-0 w-2 h-2 rounded-full bg-green-500 mt-2"></span>
-                  </div>
-                  <p class="text-accentstrong font-medium text-sm">Ophthalmologist</p>
-                  <p class="text-muted text-sm mt-1 truncate">Apollo Hospitals Dhaka</p>
-                  <div class="flex items-center gap-1 mt-2">
-                    <svg class="w-4 h-4 rating-star" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                    <span class="text-sm font-medium text-fg">4.9</span>
-                    <span class="text-sm text-muted">(456 reviews)</span>
-                  </div>
-                </div>
-              </div>
-              <button class="w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98]">
-                View Detail
-              </button>
-            </div>
-          </div>
-
-          <!-- Card 6 -->
-          <div class="doctor-card stagger-reveal visible bg-card rounded-2xl overflow-hidden border border-border card-hover">
-            <div class="p-6">
-              <div class="flex gap-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=300&h=300&fit=crop&crop=face" 
-                  alt="Dr. Nazmul Islam" 
-                  class="w-20 h-20 rounded-xl object-cover flex-shrink-0"
-                >
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-start justify-between gap-2">
-                    <h3 class="font-display font-semibold text-lg text-fg truncate">Dr. Nazmul Islam</h3>
-                    <span class="flex-shrink-0 w-2 h-2 rounded-full bg-green-500 mt-2"></span>
-                  </div>
-                  <p class="text-accentstrong font-medium text-sm">Gastroenterologist</p>
-                  <p class="text-muted text-sm mt-1 truncate">Apollo Hospitals Dhaka</p>
-                  <div class="flex items-center gap-1 mt-2">
-                    <svg class="w-4 h-4 rating-star" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                    <span class="text-sm font-medium text-fg">4.6</span>
-                    <span class="text-sm text-muted">(198 reviews)</span>
-                  </div>
-                </div>
-              </div>
-              <button class="w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98]">
-                View Detail
-              </button>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="text-center mt-10">
-          <button class="border-2 border-border text-fg font-semibold px-8 py-4 rounded-xl hover:border-accent hover:text-accent transition">
-            Load More Doctors
-          </button>
         </div>
       </div>
 
     </div>
   </section>
-
 </main>
 {% endblock %}

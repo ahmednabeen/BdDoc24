@@ -24,7 +24,9 @@ class Specialty(models.Model):
 
 class Hospital(models.Model):
     name = models.CharField(max_length=200)
-    location = models.CharField(max_length=200)
+    division = models.CharField(max_length=100, null=True, blank=True)
+    district = models.CharField(max_length=100, null=True, blank=True)
+    
     address = models.TextField(blank=True, null=True)
     contact_numbers = models.TextField(
         blank=True, 
@@ -35,9 +37,9 @@ class Hospital(models.Model):
     facilities = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='records/images/', blank=True, null=True)
 
-    
-
     def __str__(self):
+        if self.district:
+            return f"{self.name}, {self.district}"
         return self.name
 
 class Doctor(models.Model):

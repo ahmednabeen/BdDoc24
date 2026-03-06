@@ -158,78 +158,103 @@
     </div>
   </footer>
 
- <script>
-    // 1. Mobile Menu Toggle
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-
-    // 2. Theme Toggle
-    const themeToggle = document.getElementById('themeToggle');
-    themeToggle.addEventListener('click', () => document.documentElement.classList.toggle('dark'));
-
-    // 3. Search Tab Switching (Doctor vs Hospital)
-    function switchTab(tab) {
-      const doctorForm = document.getElementById('doctorSearchForm');
-      const hospitalForm = document.getElementById('hospitalSearchForm');
-      const doctorTab = document.getElementById('doctorTab');
-      const hospitalTab = document.getElementById('hospitalTab');
-      const searchBtn = document.getElementById('searchButton');
-
-      if (tab === 'doctor') {
-        doctorForm.classList.remove('hidden');
-        hospitalForm.classList.add('hidden');
-        doctorTab.classList.add('bg-card', 'shadow-sm');
-        hospitalTab.classList.remove('bg-card', 'shadow-sm');
-        searchBtn.textContent = 'Search Doctors';
-      } else {
-        hospitalForm.classList.remove('hidden');
-        doctorForm.classList.add('hidden');
-        hospitalTab.classList.add('bg-card', 'shadow-sm');
-        doctorTab.classList.remove('bg-card', 'shadow-sm');
-        searchBtn.textContent = 'Search Hospitals';
+    <script>
+      // 1. Mobile Menu Toggle
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileMenuBtn) {
+          mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
       }
-    }
 
-    // 4. Specialty Filter (Improved for Dynamic Classes)
-    function filterDoctors(category) {
-      const cards = document.querySelectorAll('.doctor-card');
-      const tabs = document.querySelectorAll('.specialty-tab');
+      // 2. Theme Toggle
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+          themeToggle.addEventListener('click', () => document.documentElement.classList.toggle('dark'));
+      }
 
-      // Update active tab styles
-      tabs.forEach(tab => {
-        // The onclick attribute directly passes the category slug
-        if (tab.getAttribute('onclick') === `filterDoctors('${category}')`) {
-          tab.classList.add('active');
-          tab.classList.remove('text-muted');
-        } else {
-          tab.classList.remove('active');
-          tab.classList.add('text-muted');
+      // 3. Search Tab Switching (Home Page)
+      function switchTab(tab) {
+        const doctorForm = document.getElementById('doctorSearchForm');
+        const hospitalForm = document.getElementById('hospitalSearchForm');
+        const doctorTab = document.getElementById('doctorTab');
+        const hospitalTab = document.getElementById('hospitalTab');
+
+        // Check if the elements exist before trying to use them
+        if (doctorForm && hospitalForm && doctorTab && hospitalTab) {
+          if (tab === 'doctor') {
+            doctorForm.classList.remove('hidden');
+            hospitalForm.classList.add('hidden');
+            doctorTab.classList.add('bg-card', 'shadow-sm');
+            hospitalTab.classList.remove('bg-card', 'shadow-sm');
+          } else {
+            hospitalForm.classList.remove('hidden');
+            doctorForm.classList.add('hidden');
+            hospitalTab.classList.add('bg-card', 'shadow-sm');
+            doctorTab.classList.remove('bg-card', 'shadow-sm');
+          }
         }
-      });
+      }
 
-      // Filter cards by checking for the class name
-      cards.forEach(card => {
-        if (category === 'all' || card.classList.contains(category)) {
-          card.style.display = 'block'; // Use style to show/hide
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
+      // 4. Doctor Specialty Filter (For Home and All Doctors pages)
+      function filterDoctors(category) {
+        const cards = document.querySelectorAll('.doctor-card');
+        const tabs = document.querySelectorAll('.specialty-tab');
 
+        tabs.forEach(tab => {
+          if (tab.getAttribute('onclick') === `filterDoctors('${category}')`) {
+            tab.classList.add('active');
+            tab.classList.remove('text-muted');
+          } else {
+            tab.classList.remove('active');
+            tab.classList.add('text-muted');
+          }
+        });
 
-    // 5. Scroll Reveal
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
+        cards.forEach(card => {
+          if (category === 'all' || card.classList.contains(category)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
 
-    document.querySelectorAll('.stagger-reveal').forEach(el => observer.observe(el));
+      // 5. NEW: Hospital Division Filter (For All Hospitals page)
+      function filterHospitals(category) {
+        const cards = document.querySelectorAll('.hospital-card');
+        const tabs = document.querySelectorAll('.specialty-tab'); // Using same class name is fine
+
+        tabs.forEach(tab => {
+          if (tab.getAttribute('onclick') === `filterHospitals('${category}')`) {
+            tab.classList.add('active');
+            tab.classList.remove('text-muted');
+          } else {
+            tab.classList.remove('active');
+            tab.classList.add('text-muted');
+          }
+        });
+
+        cards.forEach(card => {
+          if (category === 'all' || card.classList.contains(category)) {
+            card.style.display = 'flex'; // Use 'flex' to match the card's display property
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+
+      // 6. Scroll Reveal (Works on all pages)
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.stagger-reveal').forEach(el => observer.observe(el));
   </script>
+
 
 </body>
 </html>

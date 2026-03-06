@@ -5,59 +5,68 @@ from django.core.paginator import Paginator
 from django.db.models.functions import Coalesce
 
 def home(request):
-    # --- Data for Hero Section ---
+    # --- Data for Hero Section (Doctor Search) ---
     specialties_for_search = Specialty.objects.all().order_by('name')
     doctor_locations = Doctor.objects.values_list('location', flat=True).distinct().order_by('location')
+    
+    # --- Data for Hero Section (Hospital Search) ---
+    hospital_divisions = Hospital.objects.order_by('division').values_list('division', flat=True).distinct()
+    hospital_districts = Hospital.objects.order_by('district').values_list('district', flat=True).distinct()
+
+    # --- Data for Quick Stats ---
     doctor_count = Doctor.objects.count()
     hospital_count = Hospital.objects.count()
     districts_covered = Doctor.objects.aggregate(count=Count('location', distinct=True))['count']
     review_count = Review.objects.count()
 
     # --- Data for Featured Doctors Section ---
-    # This query now correctly handles doctors with no reviews.
     featured_doctors = Doctor.objects.filter(is_featured=True).annotate(
         review_count=Count('reviews'),
         avg_rating=Coalesce(Avg('reviews__rating'), 0.0) 
     ).order_by('-avg_rating', '-review_count')[:6]
     
-    # ========================= FIX STARTS HERE =========================
-    #
-    # NEW, ROBUST WAY to get specialties for the filter tabs.
-    # This directly queries the specialties that are linked to the featured doctors.
-    #
+    # --- Data for Featured Doctors' Specialty Filter Tabs ---
     specialties_for_filter = Specialty.objects.filter(
         doctor__in=featured_doctors
     ).distinct().annotate(
         doc_count=Count('doctor')
     ).order_by('-doc_count')[:5]
-    #
-    # ========================== FIX ENDS HERE ==========================
 
     # --- Data for Hospitals Section ---
-    hospitals = Hospital.objects.all().order_by('-id')[:4] # Showing 4 hospitals is better for a 4-column grid
+    hospitals = Hospital.objects.all().order_by('-id')[:4]
 
-    # --- Data for Browse by Specialty Section  ---
+    # --- Data for Browse by Specialty Section ---
     specialties_with_counts = Specialty.objects.annotate(
         doctor_count=Count('doctor')
     ).filter(doctor_count__gt=0).order_by('-doctor_count')[:8]
 
     # --- Prepare the complete context ---
     context = {
+        # Hero section context
         'specialties': specialties_for_search,
         'doctor_locations': doctor_locations,
+        'hospital_divisions': hospital_divisions,
+        'hospital_districts': hospital_districts,
+
+        # Quick Stats context
         'doctor_count': doctor_count,
         'hospital_count': hospital_count,
         'districts_covered': districts_covered,
         'review_count': review_count,
+
+        # Featured Doctors context
         'featured_doctors': featured_doctors,
-        'specialties_for_filter': specialties_for_filter, # This is now correctly populated
+        'specialties_for_filter': specialties_for_filter,
+        
+        # Hospitals context
         'hospitals': hospitals,
+
+        # Specialties context 
         'specialties_with_counts': specialties_with_counts,
     }
     return render(request, 'myapp/index.html', context)
 
 
-# NEW view for the "All Doctors" page
 def all_doctors(request):
     # Annotate doctors with review data for consistent display
     doctors = Doctor.objects.annotate(
@@ -83,12 +92,40 @@ def doctor_single(request, slug):
     return render(request, 'myapp/doctors_single.html', {'doctor': doctor})
 
 
-def hospital_single(request):
-    return render(request, 'myapp/hospital_single.html')
+def hospital_detail(request): # The 'id' parameter is removed
+    hospitals_list = Hospital.objects.all().order_by('name')
+    divisions = Hospital.objects.order_by('division').values_list('division', flat=True).distinct()
+    paginator = Paginator(hospitals_list, 9) # Show 9 hospitals per page (for a 3-column grid)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-def hospital_detail(request, id):
+    context = {
+        'hospitals': page_obj, 
+        'divisions': divisions,
+    }
+    return render(request, 'myapp/hospital_detail.html', context)
+
+
+
+
+def hospital_single(request, id):
+    # Get the specific hospital object, or return a 404 error if not found
     hospital = get_object_or_404(Hospital, id=id)
-    return render(request, 'myapp/hospital_detail.html', {'hospital': hospital})
+    
+    # Find all doctors who are linked to this hospital.
+    # Also, pre-calculate their review counts and average ratings for display.
+    doctors_at_hospital = Doctor.objects.filter(hospital=hospital).annotate(
+        review_count=Count('reviews'),
+        avg_rating=Coalesce(Avg('reviews__rating'), 0.0)
+    )
+
+    context = {
+        'hospital': hospital,
+        'doctors': doctors_at_hospital, # Pass the list of doctors to the template
+    }
+    return render(request, 'myapp/hospital_single.html', context)
+
+
 
 
 def searchdoc(request):
@@ -128,10 +165,14 @@ def searchhos(request):
 
     if name:
         hospitals = hospitals.filter(name__icontains=name)
+
+    # Use the new 'division' field for filtering
     if division:
-        hospitals = hospitals.filter(location__icontains=division)
+        hospitals = hospitals.filter(division__iexact=division)
+
+    # Use the new 'district' field for filtering
     if district:
-        hospitals = hospitals.filter(location__icontains=district)
+        hospitals = hospitals.filter(district__iexact=district)
 
     paginator = Paginator(hospitals, 6)
     page_number = request.GET.get('page')

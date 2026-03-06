@@ -12,8 +12,8 @@ urlpatterns = [
     path('doctor/<slug:slug>/', views.doctor_single, name='doctor_single'),
     
     # Keep your hospital and search URLs as they are
-    path('hospital/', views.hospital_single, name='hospital_single'),
-    path('hospital_detail/<int:id>/', views.hospital_detail, name='hospital_detail'),
+    path('hospital_single/<int:id>/', views.hospital_single, name='hospital_single'),
+    path('hospital_detail/', views.hospital_detail, name='hospital_detail'),
     path('searchdoc/', views.searchdoc, name='searchdoc'),
     path('searchhos/', views.searchhos, name='searchhos'),
 

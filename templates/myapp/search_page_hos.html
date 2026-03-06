@@ -41,7 +41,7 @@
         </div>
 
 
-        <!-- ================= SEARCH BAR CONTAINER ================= -->
+    <!-- ================= SEARCH BAR CONTAINER ================= -->
         <div class="bg-card rounded-2xl p-4 shadow-xl border border-blue-100 max-w-4xl mx-auto">
 
           <!-- ===================================================== -->
@@ -111,61 +111,58 @@
                 id="hospitalSearchForm"
                 class="hidden grid grid-cols-1 md:grid-cols-3 gap-3">
 
-            <!-- Hospital Name -->
-            <div class="relative">
-              <label for="hospital-name" class="sr-only">Hospital name</label>
-              <input type="text"
-                    name="name"
-                    id="hospital-name"
-                    placeholder="Hospital name"
-                    value="{{ request.GET.name|default_if_none:'' }}"
-                    class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
-            </div>
-
-            <!-- Division -->
-            <div class="relative">
-              <label for="division-select" class="sr-only">Select Division</label>
-              <select name="division"
-                      id="division-select"
+              <!-- Hospital Name -->
+              <div class="relative">
+                <label for="hospital-name" class="sr-only">Hospital name</label>
+                <input type="text"
+                      name="name"
+                      id="hospital-name"
+                      placeholder="Hospital name"
+                      value="{{ request.GET.name|default_if_none:'' }}"
                       class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
-                <option value="">Select Division</option>
-                <option value="Dhaka"
-                  {% if request.GET.division == "Dhaka" %}selected{% endif %}>
-                  Dhaka
-                </option>
-                <option value="Chattogram"
-                  {% if request.GET.division == "Chattogram" %}selected{% endif %}>
-                  Chattogram
-                </option>
-              </select>
-            </div>
+              </div>
 
-            <!-- District -->
-            <div class="relative">
-              <label for="district-select" class="sr-only">Select District</label>
-              <select name="district"
-                      id="district-select"
-                      class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+              <!-- Division (Now Dynamic) -->
+              <div class="relative">
+                <label for="division-select" class="sr-only">Select Division</label>
+                <select name="division"
+                        id="division-select"
+                        class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+                  <option value="">Select Division</option>
+                  {% for division in hospital_divisions %}
+                    {% if division %}
+                      <option value="{{ division }}" {% if request.GET.division == division %}selected{% endif %}>
+                        {{ division }}
+                      </option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
 
-                <option value="">Select District</option>
+              <!-- District (Now Dynamic) -->
+              <div class="relative">
+                <label for="district-select" class="sr-only">Select District</label>
+                <select name="district"
+                        id="district-select"
+                        class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+                  <option value="">Select District</option>
+                  {% for district in hospital_districts %}
+                    {% if district %}
+                      <option value="{{ district }}" {% if request.GET.district == district %}selected{% endif %}>
+                        {{ district }}
+                      </option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
 
-                {% if request.GET.district %}
-                  <option value="{{ request.GET.district }}" selected>
-                    {{ request.GET.district }}
-                  </option>
-                {% endif %}
-
-              </select>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="md:col-span-3 text-center mt-3">
-              <button type="submit"
-                      class="w-full md:w-auto px-8 py-3 bg-bccent text-fg font-semibold rounded-xl hover:opacity-90 transition-all active:scale-95 shadow-sm">
-                Search Hospitals
-              </button>
-            </div>
-
+              <!-- Submit Button -->
+              <div class="md:col-span-3 text-center mt-3">
+                <button type="submit"
+                        class="w-full md:w-auto px-8 py-3 bg-bccent text-fg font-semibold rounded-xl hover:opacity-90 transition-all active:scale-95 shadow-sm">
+                  Search Hospitals
+                </button>
+              </div>
           </form>
 
         </div> 
@@ -232,7 +229,7 @@
                 </div>
 
                 <!-- Button -->
-                <a href="{% url 'hospital_detail' hospital.id %}"
+                <a href="{% url 'hospital_single' hospital.id %}"
                   class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">
                   View Details
                 </a>
