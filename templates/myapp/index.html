@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block content %}
 <main>
   <!-- Hero Section -->
@@ -217,12 +219,17 @@
       <div id="doctorGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         
         {% for doctor in featured_doctors %}
-        <!-- Doctor Card -->
-        <div class="doctor-card stagger-reveal bg-card rounded-2xl overflow-hidden border border-border card-hover {% for spec in doctor.specialties.all %}{{ spec.slug }} {% endfor %}">
-          <div class="p-6">
+        <!-- =================== FIX STARTS HERE =================== -->
+        <!-- 1. Added `flex flex-col` to make the card a vertical flex container -->
+        <div class="doctor-card stagger-reveal bg-card rounded-2xl overflow-hidden border border-border card-hover flex flex-col {% for spec in doctor.specialties.all %}{{ spec.slug }} {% endfor %}">
+          
+          <!-- 2. Added `flex flex-col flex-grow` to this wrapper div -->
+          <div class="p-6 flex flex-col flex-grow">
             <div class="flex gap-4">
               <img src="{{ doctor.get_profile_picture_url }}" alt="Dr. {{ doctor.name }}" class="w-20 h-20 rounded-xl object-cover flex-shrink-0">
-              <div class="flex-1 min-w-0">
+              
+              <!-- 3. Added `flex-grow` here to make the text area expand -->
+              <div class="flex-1 min-w-0 flex-grow">
                 <div class="flex items-start justify-between gap-2">
                   <h3 class="font-display font-semibold text-lg text-fg truncate">{{ doctor.name }}</h3>
                   <span class="flex-shrink-0 w-2 h-2 rounded-full bg-green-500 mt-2" title="Online"></span>
@@ -234,7 +241,6 @@
                   <p class="text-muted text-sm mt-1 truncate">{{ doctor.location }}</p>
                 {% endif %}
                 
-                <!-- Corrected Review and Rating Display Logic -->
                 <div class="flex items-center gap-1 mt-2">
                   {% if doctor.review_count > 0 %}
                     <svg class="w-4 h-4 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -246,9 +252,14 @@
                 </div>
               </div>
             </div>
-            <a href="{% url 'doctor_single' doctor.slug %}" class="block w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center">View Details</a>
+            
+            <!-- 4. Added `mt-auto` to push the button to the bottom -->
+            <a href="{% url 'doctor_single' doctor.slug %}" class="block w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">
+              View Details
+            </a>
           </div>
         </div>
+        <!-- =================== FIX ENDS HERE ===================== -->
         {% empty %}
           <p class="col-span-full text-center text-muted py-12">No featured doctors found. Please add some from the admin panel and mark them as 'featured'.</p>
         {% endfor %}
@@ -256,6 +267,7 @@
       </div>
     </div>
   </section>
+
 
   <!-- Hospitals Section -->
   <section id="hospitals" class="py-16 sm:py-24 relative overflow-hidden">
@@ -270,31 +282,45 @@
       <div id="hospitalGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         
         {% for hospital in hospitals %}
+        <!-- =================== FIX STARTS HERE =================== -->
         <!-- Hospital Card (DYNAMIC) -->
-        <div class="stagger-reveal bg-card rounded-2xl overflow-hidden border border-border card-hover group">
-          <div class="h-60 overflow-hidden">
+        <!-- 1. Added `flex flex-col` to make the card a vertical flex container -->
+        <div class="stagger-reveal bg-card rounded-2xl overflow-hidden border border-border card-hover group flex flex-col">
+          
+          <!-- This part for the image is fine -->
+          <div class="h-60 overflow-hidden flex-shrink-0">
             {% if hospital.image %}
               <img src="{{ hospital.image.url }}" alt="{{ hospital.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             {% else %}
-              <!-- Placeholder image if no image is uploaded -->
-              <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=600&h=400&fit=crop" alt="Default hospital image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <img src="{% static 'images/default_hospital.jpg' %}" alt="Default hospital image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             {% endif %}
           </div>
-          <div class="p-6">
-            <h3 class="font-display font-bold text-xl text-fg">{{ hospital.name }}</h3>
-            <p class="text-muted text-sm flex items-center gap-1 mt-1 mb-3">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              {{ hospital.location }}
-            </p>
-            <div class="flex items-center gap-4 mb-4">
-              <div class="flex items-center gap-1">
-                <svg class="w-5 h-5 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                <!-- Static rating for now. You can add a rating model for hospitals later. -->
-                <span class="font-semibold text-fg">4.8</span>
+
+          <!-- 2. Added `flex flex-col flex-grow` to this wrapper div -->
+          <div class="p-6 flex flex-col flex-grow">
+            
+            <!-- 3. Added `flex-grow` here to make the text area expand -->
+            <div class="flex-grow">
+              <h3 class="font-display font-bold text-xl text-fg">{{ hospital.name }}</h3>
+              <p class="text-muted text-sm flex items-center gap-1 mt-1 mb-3">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <!-- Use the correct fields from your updated model -->
+                <span>{{ hospital.district }}, {{ hospital.division }}</span>
+              </p>
+              <div class="flex items-center gap-4 mb-4">
+                <div class="flex items-center gap-1">
+                  <svg class="w-5 h-5 text-bccent rating-star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  <span class="font-semibold text-fg">4.8</span>
+                </div>
               </div>
             </div>
-            <a href="{% url 'hospital_single' hospital.id %}" class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all text-center">View Details</a>
+
+            <!-- 4. Added `mt-auto` to push the button to the bottom -->
+            <a href="{% url 'hospital_single' hospital.id %}" class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all text-center mt-auto">
+              View Details
+            </a>
           </div>
+          <!-- =================== FIX ENDS HERE ===================== -->
         </div>
         {% empty %}
           <p class="col-span-full text-center text-muted py-12">No hospitals found. Please add some from the admin panel.</p>
@@ -309,6 +335,7 @@
       </div>
     </div>
   </section>
+
 
   <!-- Specialties Section -->
   <section id="specialties" class="py-16 sm:py-24 bg-bg">
