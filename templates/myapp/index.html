@@ -218,17 +218,11 @@
       <!-- Doctor Cards Grid (DYNAMIC) -->
       <div id="doctorGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         
-        {% for doctor in featured_doctors %}
-        <!-- =================== FIX STARTS HERE =================== -->
-        <!-- 1. Added `flex flex-col` to make the card a vertical flex container -->
+        {% for doctor in featured_doctors %} 
         <div class="doctor-card stagger-reveal bg-card rounded-2xl overflow-hidden border border-border card-hover flex flex-col {% for spec in doctor.specialties.all %}{{ spec.slug }} {% endfor %}">
-          
-          <!-- 2. Added `flex flex-col flex-grow` to this wrapper div -->
           <div class="p-6 flex flex-col flex-grow">
             <div class="flex gap-4">
               <img src="{{ doctor.get_profile_picture_url }}" alt="Dr. {{ doctor.name }}" class="w-20 h-20 rounded-xl object-cover flex-shrink-0">
-              
-              <!-- 3. Added `flex-grow` here to make the text area expand -->
               <div class="flex-1 min-w-0 flex-grow">
                 <div class="flex items-start justify-between gap-2">
                   <h3 class="font-display font-semibold text-lg text-fg truncate">{{ doctor.name }}</h3>
@@ -252,14 +246,11 @@
                 </div>
               </div>
             </div>
-            
-            <!-- 4. Added `mt-auto` to push the button to the bottom -->
             <a href="{% url 'doctor_single' doctor.slug %}" class="block w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">
               View Details
             </a>
           </div>
         </div>
-        <!-- =================== FIX ENDS HERE ===================== -->
         {% empty %}
           <p class="col-span-full text-center text-muted py-12">No featured doctors found. Please add some from the admin panel and mark them as 'featured'.</p>
         {% endfor %}
@@ -282,12 +273,7 @@
       <div id="hospitalGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         
         {% for hospital in hospitals %}
-        <!-- =================== FIX STARTS HERE =================== -->
-        <!-- Hospital Card (DYNAMIC) -->
-        <!-- 1. Added `flex flex-col` to make the card a vertical flex container -->
         <div class="stagger-reveal bg-card rounded-2xl overflow-hidden border border-border card-hover group flex flex-col">
-          
-          <!-- This part for the image is fine -->
           <div class="h-60 overflow-hidden flex-shrink-0">
             {% if hospital.image %}
               <img src="{{ hospital.image.url }}" alt="{{ hospital.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -296,15 +282,11 @@
             {% endif %}
           </div>
 
-          <!-- 2. Added `flex flex-col flex-grow` to this wrapper div -->
           <div class="p-6 flex flex-col flex-grow">
-            
-            <!-- 3. Added `flex-grow` here to make the text area expand -->
             <div class="flex-grow">
               <h3 class="font-display font-bold text-xl text-fg">{{ hospital.name }}</h3>
               <p class="text-muted text-sm flex items-center gap-1 mt-1 mb-3">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                <!-- Use the correct fields from your updated model -->
                 <span>{{ hospital.district }}, {{ hospital.division }}</span>
               </p>
               <div class="flex items-center gap-4 mb-4">
@@ -314,13 +296,10 @@
                 </div>
               </div>
             </div>
-
-            <!-- 4. Added `mt-auto` to push the button to the bottom -->
             <a href="{% url 'hospital_single' hospital.id %}" class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all text-center mt-auto">
               View Details
             </a>
           </div>
-          <!-- =================== FIX ENDS HERE ===================== -->
         </div>
         {% empty %}
           <p class="col-span-full text-center text-muted py-12">No hospitals found. Please add some from the admin panel.</p>
