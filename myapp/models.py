@@ -26,8 +26,8 @@ class Hospital(models.Model):
     name = models.CharField(max_length=200)
     division = models.CharField(max_length=100, null=True, blank=True)
     district = models.CharField(max_length=100, null=True, blank=True)
-    
     address = models.TextField(blank=True, null=True)
+    about = models.TextField(blank=True, null=True, help_text="A general description or overview of the hospital.")
     contact_numbers = models.TextField(
         blank=True, 
         null=True,

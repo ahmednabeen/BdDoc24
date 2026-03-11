@@ -15,6 +15,15 @@ class HospitalAdmin(admin.ModelAdmin):
     search_fields = ('name', 'division', 'district')
     list_filter = ('division', 'district')
 
+    fieldsets = (
+        ('Location Information', {
+            'fields': ('name', 'division', 'district', 'address')
+        }),
+        ('Details & Facilities', {
+            'fields': ('about', 'diagnosis', 'facilities', 'contact_numbers', 'image')
+        }),
+    )
+
 class ExperienceInline(admin.TabularInline):
     model = Experience
     extra = 1
