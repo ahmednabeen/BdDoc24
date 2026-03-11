@@ -41,7 +41,7 @@
         </div>
 
 
-    <!-- ================= SEARCH BAR CONTAINER ================= -->
+        <!-- ================= SEARCH BAR CONTAINER ================= -->
         <div class="bg-card rounded-2xl p-4 shadow-xl border border-blue-100 max-w-4xl mx-auto">
 
           <!-- ===================================================== -->
@@ -103,7 +103,7 @@
 
 
           <!-- ===================================================== -->
-          <!-- ================= HOSPITAL SEARCH FORM =============== -->
+          <!-- ================= HOSPITAL SEARCH FORM ============== -->
           <!-- ===================================================== -->
 
           <form method="GET"
@@ -122,7 +122,7 @@
                       class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
               </div>
 
-              <!-- Division (Now Dynamic) -->
+              <!-- Division (Dynamic) -->
               <div class="relative">
                 <label for="division-select" class="sr-only">Select Division</label>
                 <select name="division"
@@ -139,20 +139,14 @@
                 </select>
               </div>
 
-              <!-- District (Now Dynamic) -->
+              <!-- District (Now controlled by JavaScript) -->
               <div class="relative">
                 <label for="district-select" class="sr-only">Select District</label>
                 <select name="district"
                         id="district-select"
                         class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
                   <option value="">Select District</option>
-                  {% for district in hospital_districts %}
-                    {% if district %}
-                      <option value="{{ district }}" {% if request.GET.district == district %}selected{% endif %}>
-                        {{ district }}
-                      </option>
-                    {% endif %}
-                  {% endfor %}
+                  <!-- This will be populated automatically -->
                 </select>
               </div>
 
@@ -164,6 +158,10 @@
                 </button>
               </div>
           </form>
+
+          <!-- This tag safely passes the division-to-district mapping to your JavaScript -->
+          {{ division_district_map|json_script:"division-district-data" }}
+
 
         </div>
 

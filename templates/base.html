@@ -188,7 +188,7 @@
     </div>
   </footer>
 
-    <script>
+  <script>
       // 1. Mobile Menu Toggle
       const mobileMenuBtn = document.getElementById('mobileMenuBtn');
       const mobileMenu = document.getElementById('mobileMenu');
@@ -208,8 +208,6 @@
         const hospitalForm = document.getElementById('hospitalSearchForm');
         const doctorTab = document.getElementById('doctorTab');
         const hospitalTab = document.getElementById('hospitalTab');
-
-        // Check if the elements exist before trying to use them
         if (doctorForm && hospitalForm && doctorTab && hospitalTab) {
           if (tab === 'doctor') {
             doctorForm.classList.remove('hidden');
@@ -225,11 +223,10 @@
         }
       }
 
-      // 4. Doctor Specialty Filter (For Home and All Doctors pages)
+      // 4. Doctor Specialty Filter
       function filterDoctors(category) {
         const cards = document.querySelectorAll('.doctor-card');
         const tabs = document.querySelectorAll('.specialty-tab');
-
         tabs.forEach(tab => {
           if (tab.getAttribute('onclick') === `filterDoctors('${category}')`) {
             tab.classList.add('active');
@@ -239,7 +236,6 @@
             tab.classList.add('text-muted');
           }
         });
-
         cards.forEach(card => {
           if (category === 'all' || card.classList.contains(category)) {
             card.style.display = 'block';
@@ -249,11 +245,10 @@
         });
       }
 
-      // 5. NEW: Hospital Division Filter (For All Hospitals page)
+      // 5. Hospital Division Filter
       function filterHospitals(category) {
         const cards = document.querySelectorAll('.hospital-card');
-        const tabs = document.querySelectorAll('.specialty-tab'); // Using same class name is fine
-
+        const tabs = document.querySelectorAll('.specialty-tab');
         tabs.forEach(tab => {
           if (tab.getAttribute('onclick') === `filterHospitals('${category}')`) {
             tab.classList.add('active');
@@ -263,17 +258,49 @@
             tab.classList.add('text-muted');
           }
         });
-
         cards.forEach(card => {
           if (category === 'all' || card.classList.contains(category)) {
-            card.style.display = 'flex'; // Use 'flex' to match the card's display property
+            card.style.display = 'flex';
           } else {
             card.style.display = 'none';
           }
         });
       }
 
-      // 6. Scroll Reveal (Works on all pages)
+      // =================== NEW: DEPENDENT DROPDOWN LOGIC ===================
+      document.addEventListener('DOMContentLoaded', function() {
+          const divisionSelect = document.getElementById('division-select');
+          const districtSelect = document.getElementById('district-select');
+          const dataElement = document.getElementById('division-district-data');
+
+          // Only run this if the search form elements are on the page
+          if (divisionSelect && districtSelect && dataElement) {
+              const divisionDistrictMap = JSON.parse(dataElement.textContent);
+
+              divisionSelect.addEventListener('change', function() {
+                  const selectedDivision = this.value;
+                  
+                  // Clear existing district options
+                  districtSelect.innerHTML = '<option value="">Select District</option>';
+
+                  if (selectedDivision && divisionDistrictMap[selectedDivision]) {
+                      // Get the list of districts for the selected division
+                      const districts = divisionDistrictMap[selectedDivision];
+                      
+                      // Create and add new options to the district dropdown
+                      districts.forEach(function(district) {
+                          const option = document.createElement('option');
+                          option.value = district;
+                          option.textContent = district;
+                          districtSelect.appendChild(option);
+                      });
+                  }
+              });
+          }
+      });
+      // =================== END OF NEW LOGIC =====================
+
+      // 7. Scroll Reveal
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -284,6 +311,7 @@
 
       document.querySelectorAll('.stagger-reveal').forEach(el => observer.observe(el));
   </script>
+
 
 
 </body>

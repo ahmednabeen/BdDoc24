@@ -14,9 +14,9 @@
           Find Your <span class="gradient-text">Doctors</span>
         </h1>
         <p class="text-slate-600">Find the right specialist for your needs</p>
-      </div>
+      
 
-      <!-- ================= SEARCH TYPE TABS ================= -->
+        <!-- ================= SEARCH TYPE TABS ================= -->
         <div class="flex justify-center mb-2">
           <div class="flex bg-white/20 backdrop-blur-sm rounded-xl px-8 py-3 border border-white/30 text-black">
             
@@ -38,7 +38,7 @@
         </div>
 
 
-    <!-- ================= SEARCH BAR CONTAINER ================= -->
+        <!-- ================= SEARCH BAR CONTAINER ================= -->
         <div class="bg-card rounded-2xl p-4 shadow-xl border border-blue-100 max-w-4xl mx-auto">
 
           <!-- ===================================================== -->
@@ -100,7 +100,7 @@
 
 
           <!-- ===================================================== -->
-          <!-- ================= HOSPITAL SEARCH FORM =============== -->
+          <!-- ================= HOSPITAL SEARCH FORM ============== -->
           <!-- ===================================================== -->
 
           <form method="GET"
@@ -108,64 +108,61 @@
                 id="hospitalSearchForm"
                 class="hidden grid grid-cols-1 md:grid-cols-3 gap-3">
 
-            <!-- Hospital Name -->
-            <div class="relative">
-              <label for="hospital-name" class="sr-only">Hospital name</label>
-              <input type="text"
-                    name="name"
-                    id="hospital-name"
-                    placeholder="Hospital name"
-                    value="{{ request.GET.name|default_if_none:'' }}"
-                    class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
-            </div>
-
-            <!-- Division -->
-            <div class="relative">
-              <label for="division-select" class="sr-only">Select Division</label>
-              <select name="division"
-                      id="division-select"
+              <!-- Hospital Name -->
+              <div class="relative">
+                <label for="hospital-name" class="sr-only">Hospital name</label>
+                <input type="text"
+                      name="name"
+                      id="hospital-name"
+                      placeholder="Hospital name"
+                      value="{{ request.GET.name|default_if_none:'' }}"
                       class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
-                <option value="">Select Division</option>
-                <option value="Dhaka"
-                  {% if request.GET.division == "Dhaka" %}selected{% endif %}>
-                  Dhaka
-                </option>
-                <option value="Chattogram"
-                  {% if request.GET.division == "Chattogram" %}selected{% endif %}>
-                  Chattogram
-                </option>
-              </select>
-            </div>
+              </div>
 
-            <!-- District -->
-            <div class="relative">
-              <label for="district-select" class="sr-only">Select District</label>
-              <select name="district"
-                      id="district-select"
-                      class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+              <!-- Division (Dynamic) -->
+              <div class="relative">
+                <label for="division-select" class="sr-only">Select Division</label>
+                <select name="division"
+                        id="division-select"
+                        class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+                  <option value="">Select Division</option>
+                  {% for division in hospital_divisions %}
+                    {% if division %}
+                      <option value="{{ division }}" {% if request.GET.division == division %}selected{% endif %}>
+                        {{ division }}
+                      </option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
 
-                <option value="">Select District</option>
+              <!-- District (Now controlled by JavaScript) -->
+              <div class="relative">
+                <label for="district-select" class="sr-only">Select District</label>
+                <select name="district"
+                        id="district-select"
+                        class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+                  <option value="">Select District</option>
+                  <!-- This will be populated automatically -->
+                </select>
+              </div>
 
-                {% if request.GET.district %}
-                  <option value="{{ request.GET.district }}" selected>
-                    {{ request.GET.district }}
-                  </option>
-                {% endif %}
-
-              </select>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="md:col-span-3 text-center mt-3">
-              <button type="submit"
-                      class="w-full md:w-auto px-8 py-3 bg-bccent text-fg font-semibold rounded-xl hover:opacity-90 transition-all active:scale-95 shadow-sm">
-                Search Hospitals
-              </button>
-            </div>
-
+              <!-- Submit Button -->
+              <div class="md:col-span-3 text-center mt-3">
+                <button type="submit"
+                        class="w-full md:w-auto px-8 py-3 bg-bccent text-fg font-semibold rounded-xl hover:opacity-90 transition-all active:scale-95 shadow-sm">
+                  Search Hospitals
+                </button>
+              </div>
           </form>
 
+          <!-- This tag safely passes the division-to-district mapping to your JavaScript -->
+          {{ division_district_map|json_script:"division-district-data" }}
+
+
         </div>
+      </div>
+    </div>
   </section>
 
   <!-- ================= RESULTS SECTION ================= -->
@@ -205,7 +202,7 @@
 
                 <div class="flex-grow"></div>
 
-                <a href="{% url 'doctor_detail' doctor.id %}" class="block w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center">
+                <a href="{% url 'doctor_single' doctor.slug %}" class="block w-full mt-4 py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center">
                   View Details
                 </a>
               </div>

@@ -17,6 +17,152 @@
         <p class="text-lg text-slate-600 max-w-2xl mx-auto">
           Browse our comprehensive directory of verified healthcare professionals across Bangladesh.
         </p>
+
+        <!-- ================= SEARCH TYPE TABS ================= -->
+        <div class="flex justify-center mb-2">
+          <div class="flex bg-white/20 backdrop-blur-sm rounded-xl px-8 py-3 border border-white/30 text-black">
+            
+            <button type="button"
+              id="doctorTab"
+              class="px-24 py-3 rounded-lg font-bold bg-card text-black shadow-sm transition"
+              onclick="switchTab('doctor')">
+              <i>Find Doctors</i>
+            </button>
+
+            <button type="button"
+              id="hospitalTab"
+              class="px-24 py-3 rounded-lg font-bold text-black hover:text-black transition"
+              onclick="switchTab('hospital')">
+              <i>Find Hospitals</i>
+            </button>
+
+          </div>
+        </div>
+
+
+        <!-- ================= SEARCH BAR CONTAINER ================= -->
+        <div class="bg-card rounded-2xl p-4 shadow-xl border border-blue-100 max-w-4xl mx-auto">
+
+          <!-- ===================================================== -->
+          <!-- ================= DOCTOR SEARCH FORM ================= -->
+          <!-- ===================================================== -->
+
+          <form method="GET"
+                action="{% url 'searchdoc' %}"
+                id="doctorSearchForm"
+                class="grid grid-cols-1 md:grid-cols-3 gap-3">
+
+            <!-- Doctor Name -->
+            <div class="relative">
+              <label for="doctor-name" class="sr-only">Search by doctor name</label>
+              <input type="text"
+                    name="name"
+                    id="doctor-name"
+                    placeholder="Search by doctor name"
+                    class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+            </div>
+
+            <!-- Specialty -->
+            <div class="relative">
+              <label for="specialty-select" class="sr-only">Select Specialty</label>
+              <select name="specialty"
+                      id="specialty-select"
+                      class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+                <option value="">Select Specialty</option>
+                {% for specialty in specialties %}
+                  <option value="{{ specialty.slug }}">{{ specialty.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Location -->
+            <div class="relative">
+              <label for="doctor-city-select" class="sr-only">Select City</label>
+              <select name="location"
+                      id="doctor-city-select"
+                      class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+                <option value="">Select City</option>
+                {% for location in doctor_locations %}
+                  {% if location %}
+                    <option value="{{ location }}">{{ location }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="md:col-span-3 text-center mt-3">
+              <button type="submit"
+                class="w-full md:w-auto px-8 py-3 bg-bccent text-fg font-semibold rounded-xl hover:opacity-90 transition-all active:scale-95 shadow-sm">
+                Search Doctors
+              </button>
+            </div>
+
+          </form>
+
+
+          <!-- ===================================================== -->
+          <!-- ================= HOSPITAL SEARCH FORM ============== -->
+          <!-- ===================================================== -->
+
+          <form method="GET"
+                action="{% url 'searchhos' %}"
+                id="hospitalSearchForm"
+                class="hidden grid grid-cols-1 md:grid-cols-3 gap-3">
+
+              <!-- Hospital Name -->
+              <div class="relative">
+                <label for="hospital-name" class="sr-only">Hospital name</label>
+                <input type="text"
+                      name="name"
+                      id="hospital-name"
+                      placeholder="Hospital name"
+                      value="{{ request.GET.name|default_if_none:'' }}"
+                      class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+              </div>
+
+              <!-- Division (Dynamic) -->
+              <div class="relative">
+                <label for="division-select" class="sr-only">Select Division</label>
+                <select name="division"
+                        id="division-select"
+                        class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+                  <option value="">Select Division</option>
+                  {% for division in hospital_divisions %}
+                    {% if division %}
+                      <option value="{{ division }}" {% if request.GET.division == division %}selected{% endif %}>
+                        {{ division }}
+                      </option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+
+              <!-- District (Now controlled by JavaScript) -->
+              <div class="relative">
+                <label for="district-select" class="sr-only">Select District</label>
+                <select name="district"
+                        id="district-select"
+                        class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+                  <option value="">Select District</option>
+                  <!-- This will be populated automatically -->
+                </select>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="md:col-span-3 text-center mt-3">
+                <button type="submit"
+                        class="w-full md:w-auto px-8 py-3 bg-bccent text-fg font-semibold rounded-xl hover:opacity-90 transition-all active:scale-95 shadow-sm">
+                  Search Hospitals
+                </button>
+              </div>
+          </form>
+
+          <!-- This tag safely passes the division-to-district mapping to your JavaScript -->
+          {{ division_district_map|json_script:"division-district-data" }}
+
+
+        </div>
       </div>
     </section>
 
