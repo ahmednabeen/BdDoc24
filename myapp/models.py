@@ -38,9 +38,12 @@ class Hospital(models.Model):
     image = models.ImageField(upload_to='records/images/', blank=True, null=True)
 
     def __str__(self):
+        parts = [self.name]
         if self.district:
-            return f"{self.name}, {self.district}"
-        return self.name
+            parts.append(self.district)
+        if self.division:
+            parts.append(self.division)
+        return ", ".join(parts)
 
 class Doctor(models.Model):
     name = models.CharField(max_length=100)
@@ -51,45 +54,68 @@ class Doctor(models.Model):
     experience_years = models.PositiveIntegerField(null=True, blank=True)
     about = models.TextField()
     specialties = models.ManyToManyField(Specialty, blank=True)
-    hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    hospital = models.ForeignKey(
+        Hospital, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='doctors' 
+    )
+
     slug = models.SlugField(max_length=255, unique=True, blank=True, help_text="Unique URL-friendly identifier for the doctor.")
     is_featured = models.BooleanField(default=False)  
-
 
     def __str__(self):
         return self.name
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            super().save(*args, **kwargs)  # Get PK first
+            super().save(*args, **kwargs)
             self.slug = f"{slugify(self.name)}-{self.pk}"
             return super().save(update_fields=['slug'])
         return super().save(*args, **kwargs)
             
     def get_profile_picture_url(self):
-        """Return the uploaded profile picture URL, or a default static image if none exists."""
         if self.profile_picture and hasattr(self.profile_picture, 'url'):
             return self.profile_picture.url
-        return static('images/default_doctor.jpg')  # path in your /static/images/ folder
+        return static('images/default_doctor.jpg')
 
 class Experience(models.Model):
     doctor = models.ForeignKey(Doctor, related_name='experiences', on_delete=models.CASCADE)
     position = models.CharField(max_length=100)
     hospital_name = models.CharField(max_length=200)
     start_year = models.PositiveIntegerField(null=True, blank=True)
-    end_year = models.PositiveIntegerField(null=True, blank=True) # Can be ongoing
+    end_year = models.PositiveIntegerField(null=True, blank=True)
     description = models.TextField()
 
     def __str__(self):
         return f"{self.position} at {self.hospital_name}"
 
-class Review(models.Model):
+# =================== RENAMED THIS MODEL ===================
+class DoctorReview(models.Model):
     doctor = models.ForeignKey(Doctor, related_name='reviews', on_delete=models.CASCADE)
     patient_name = models.CharField(max_length=100)
     rating = models.FloatField(validators=[MinValueValidator(1.0), MaxValueValidator(5.0)])
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-created_at']
+
     def __str__(self):
         return f"Review for {self.doctor.name} by {self.patient_name}"
+# ==========================================================
 
+class HospitalReview(models.Model):
+    hospital = models.ForeignKey(Hospital, related_name='reviews', on_delete=models.CASCADE)
+    patient_name = models.CharField(max_length=100)
+    rating = models.FloatField(validators=[MinValueValidator(1.0), MaxValueValidator(5.0)])
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Review for {self.hospital.name} by {self.patient_name}"
