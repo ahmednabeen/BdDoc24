@@ -195,3 +195,16 @@ def searchhos(request):
         'hospitals': page_obj,
     }
     return render(request, 'myapp/search_page_hos.html', context)
+
+
+def about_us(request):
+    search_context = get_search_bar_context()
+    stats_context = {
+        'doctor_count': Doctor.objects.count(),
+        'hospital_count': Hospital.objects.count(),
+        'districts_covered': Doctor.objects.aggregate(count=Count('location', distinct=True))['count'],
+        'review_count': DoctorReview.objects.count() + HospitalReview.objects.count()
+    }
+    context = {**search_context, **stats_context}
+    
+    return render(request, 'myapp/about.html', context)

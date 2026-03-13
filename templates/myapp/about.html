@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<main>
+  <!-- ====================================================================== -->
+  <!-- =====================  1. Hero Section ============================== -->
+  <!-- ====================================================================== -->
+  <section class="relative hero-gradient overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24">
+    <div class="blob-1"></div>
+    <div class="blob-2"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-slate-900 leading-tight mb-6">
+        About <span class="gradient-text">BdDoc24</span>
+      </h1>
+      <p class="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto">
+        Building trust through transparency, empowering millions to make informed healthcare decisions with reliable, verified information.
+      </p>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- =====================  2. Our Story Section ========================== -->
+  <!-- ====================================================================== -->
+  <section class="py-16 sm:py-24 bg-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <!-- Image Column -->
+        <div class="stagger-reveal">
+            <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80" 
+                alt="A doctor consulting with a patient, showing our story of connecting people" 
+                class="rounded-2xl shadow-xl w-full h-80 object-cover border-4 border-card">
+        </div>
+        <!-- Content Column -->
+        <div class="stagger-reveal">
+          <h2 class="font-display font-bold text-3xl sm:text-4xl text-fg mb-4">Born From a Personal Struggle</h2>
+          <div class="prose prose-lg text-muted max-w-none">
+            <p>
+              BdDoc24 was born from a simple yet powerful realization: finding the right doctor in Bangladesh shouldn't be a challenge. Our founders experienced firsthand the frustration of navigating fragmented healthcare information and unreliable referrals.
+            </p>
+            <p>
+              What started as a personal quest has evolved into a platform built on the pillars of <strong class="text-fg">transparency</strong>, <strong class="text-fg">verification</strong>, and <strong class="text-fg">accessibility</strong>, connecting millions of Bangladeshis to the care they deserve.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- =====================  3. Mission & Vision Section =================== -->
+  <!-- ====================================================================== -->
+  <section class="relative hero-gradient overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Mission Card -->
+        <div class="stagger-reveal bg-card rounded-2xl p-8 border border-border card-hover">
+          <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-accent/10 flex items-center justify-center border border-accent/20">
+            <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <h3 class="font-display text-center font-semibold text-2xl text-fg mb-3">Our Mission</h3>
+          <p class="text-muted text-center">
+            To empower every individual in Bangladesh to make informed healthcare decisions by providing a comprehensive, verified, and user-friendly directory.
+          </p>
+        </div>
+        
+        <!-- Vision Card -->
+        <div class="stagger-reveal bg-card rounded-2xl p-8 border border-border card-hover">
+          <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-accent/10 flex items-center justify-center border border-accent/20">
+            <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          </div>
+          <h3 class="font-display text-center font-semibold text-2xl text-fg mb-3">Our Vision</h3>
+          <p class="text-muted text-center">
+            To become the most trusted and indispensable digital health resource in Bangladesh, fostering a healthier nation by connecting patients to the right care.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- =====================  4. Statistics Section ======================== -->
+  <!-- ====================================================================== -->
+  <section class="py-16 sm:py-24 bg-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="font-display font-bold text-3xl sm:text-4xl text-fg mb-2">Our Impact in Numbers</h2>
+        <p class="text-muted text-lg">Making a tangible difference across the nation.</p>
+      </div>
+      <!-- This section reuses the stats from your homepage for consistency -->
+      <div class="flex flex-wrap justify-center gap-12 sm:gap-16">
+        <div class="text-center stagger-reveal">
+          <div class="font-display font-bold text-4xl sm:text-5xl text-fg">{{ doctor_count }}</div>
+          <div class="text-slate-500 text-sm mt-1">Verified Doctors</div>
+        </div>
+        <div class="text-center stagger-reveal">
+          <div class="font-display font-bold text-4xl sm:text-5xl text-fg">{{ hospital_count }}</div>
+          <div class="text-slate-500 text-sm mt-1">Hospitals Listed</div>
+        </div>
+        <div class="text-center stagger-reveal">
+          <div class="font-display font-bold text-4xl sm:text-5xl text-fg">{{ districts_covered }}</div>
+          <div class="text-slate-500 text-sm mt-1">Districts Covered</div>
+        </div>
+        <div class="text-center stagger-reveal">
+          <div class="font-display font-bold text-4xl sm:text-5xl text-fg">{{ review_count }}+</div>
+          <div class="text-slate-500 text-sm mt-1">Patient Reviews</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- =====================  5. Team Section ============================== -->
+  <!-- ====================================================================== -->
+  <section class="relative hero-gradient overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="font-display font-bold text-3xl sm:text-4xl text-fg mb-2">Meet Our Leadership</h2>
+        <p class="text-muted text-lg">The people dedicated to realizing our vision.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <!-- Team Member 1 -->
+        <div class="text-center stagger-reveal">
+          <div class="relative w-40 h-40 mx-auto mb-4">
+            <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=400&q=80" 
+                 alt="Dr. Ahmad Rahman" 
+                 class="w-full h-full rounded-full object-cover shadow-lg border-4 border-card">
+          </div>
+          <h3 class="font-display font-semibold text-xl text-fg">Dr. Ahmad Rahman</h3>
+          <p class="text-accent font-medium">Founder & CEO</p>
+        </div>
+        
+        <!-- Team Member 2 -->
+        <div class="text-center stagger-reveal">
+          <div class="relative w-40 h-40 mx-auto mb-4">
+            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80" 
+                 alt="Dr. Fatima Khan" 
+                 class="w-full h-full rounded-full object-cover shadow-lg border-4 border-card">
+          </div>
+          <h3 class="font-display font-semibold text-xl text-fg">Dr. Fatima Khan</h3>
+          <p class="text-accent font-medium">Chief Medical Officer</p>
+        </div>
+        
+        <!-- Team Member 3 -->
+        <div class="text-center stagger-reveal">
+          <div class="relative w-40 h-40 mx-auto mb-4">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" 
+                 alt="Karim Hassan" 
+                 class="w-full h-full rounded-full object-cover shadow-lg border-4 border-card">
+          </div>
+          <h3 class="font-display font-semibold text-xl text-fg">Karim Hassan</h3>
+          <p class="text-accent font-medium">Chief Technology Officer</p>
+        </div>
+        
+        <!-- Team Member 4 -->
+        <div class="text-center stagger-reveal">
+          <div class="relative w-40 h-40 mx-auto mb-4">
+            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80" 
+                 alt="Nusrat Jahan" 
+                 class="w-full h-full rounded-full object-cover shadow-lg border-4 border-card">
+          </div>
+          <h3 class="font-display font-semibold text-xl text-fg">Nusrat Jahan</h3>
+          <p class="text-accent font-medium">Head of Operations</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+{% endblock %}
