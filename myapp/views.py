@@ -36,11 +36,10 @@ def get_search_bar_context():
 def home(request):
     search_context = get_search_bar_context()
 
-    # This now correctly references DoctorReview
     doctor_count = Doctor.objects.count()
     hospital_count = Hospital.objects.count()
     districts_covered = Doctor.objects.aggregate(count=Count('location', distinct=True))['count']
-    review_count = DoctorReview.objects.count() + HospitalReview.objects.count() # Total reviews
+    review_count = DoctorReview.objects.count() + HospitalReview.objects.count() 
 
     featured_doctors = Doctor.objects.filter(is_featured=True).annotate(
         review_count=Count('reviews'),
@@ -54,7 +53,7 @@ def home(request):
     hospitals = Hospital.objects.annotate(
         review_count=Count('reviews'),
         avg_rating=Coalesce(Avg('reviews__rating'), 0.0)
-    ).order_by('-avg_rating')[:8]
+    ).order_by('-avg_rating')[:6]
 
     specialties_with_counts = Specialty.objects.annotate(
         doctor_count=Count('doctor')
@@ -208,3 +207,16 @@ def about_us(request):
     context = {**search_context, **stats_context}
     
     return render(request, 'myapp/about.html', context)
+
+
+def contact_us(request ):
+    search_context = get_search_bar_context()
+    return render(request, 'myapp/contact.html', search_context)
+
+def privacy_policy(request):
+    search_context = get_search_bar_context()
+    return render(request, 'myapp/privacy_policy.html', search_context)
+
+def terms_of_service(request):
+    search_context = get_search_bar_context()
+    return render(request, 'myapp/terms_of_service.html', search_context)

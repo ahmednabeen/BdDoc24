@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<main>
+  <!-- ====================================================================== -->
+  <!-- =====================  1. Hero Section ============================== -->
+  <!-- ====================================================================== -->
+  <section class="relative hero-gradient overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24">
+    <div class="blob-1"></div>
+    <div class="blob-2"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="font-display font-bold text-4xl sm:text-5xl text-slate-900 mb-4">
+        Privacy <span class="gradient-text">Policy</span>
+      </h1>
+      <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+        Your trust is our priority. This policy explains what information we collect and how we are committed to protecting it.
+      </p>
+      <p class="text-sm text-slate-500 mt-4">Last Updated: March 11, 2026</p>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- =====================  2. Policy Content Section ===================== -->
+  <!-- ====================================================================== -->
+  <section class="py-16 sm:py-24 bg-bg">
+    <!-- WIDER CONTAINER: Changed max-w-4xl to max-w-5xl -->
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+
+      <!-- Card 1: Information We Collect -->
+      <div class="stagger-reveal bg-card rounded-2xl p-8 sm:p-10 border border-border card-hover">
+        <div class="flex items-start gap-6">
+          <div class="w-12 h-12 flex-shrink-0 rounded-xl bg-accent/10 flex items-center justify-center border border-accent/20">
+            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          </div>
+          <div>
+            <h2 class="font-display font-bold text-2xl text-fg mb-4">1. Information We Collect</h2>
+            <!-- Using prose for nice list/paragraph styling -->
+            <div class="prose text-muted max-w-none">
+              <p>We may collect the following types of information:</p>
+              <ul>
+                <li><strong>Information You Provide to Us:</strong> This includes information submitted through our contact forms, such as your name, email address, and the content of your message. If you are a healthcare provider listing your practice, we collect professional information such as your name, specialty, qualifications, and contact details.</li>
+                <li><strong>Information from Your Use of Our Site:</strong> We collect non-personally identifying information that web browsers and servers typically make available, such as your browser type, language preference, referring site, and the date and time of each visitor request. We also collect information from search queries you perform on the site to improve our services and understand user needs.</li>
+                <li><strong>Cookies:</strong> Like many websites, we use "cookies" to collect information. A cookie is a small data file that we transfer to your computer's hard disk for record-keeping purposes. We use cookies to understand how you interact with our site and to monitor aggregate usage and web traffic routing.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: How We Use Information -->
+      <div class="stagger-reveal bg-card rounded-2xl p-8 sm:p-10 border border-border card-hover">
+        <div class="flex items-start gap-6">
+          <div class="w-12 h-12 flex-shrink-0 rounded-xl bg-accent/10 flex items-center justify-center border border-accent/20">
+            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <div>
+            <h2 class="font-display font-bold text-2xl text-fg mb-4">2. How We Use Your Information</h2>
+            <div class="prose text-muted max-w-none">
+              <p>We use the information we collect for the following purposes:</p>
+              <ul>
+                <li>To operate, maintain, and improve our website, services, and features.</li>
+                <li>To respond to your comments, questions, and requests and to provide customer service.</li>
+                <li>To understand user behavior and trends to enhance the user experience.</li>
+                <li>To populate our directory with accurate information about healthcare providers.</li>
+                <li>To monitor and analyze trends, usage, and activities in connection with our services.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Information Sharing -->
+      <div class="stagger-reveal bg-card rounded-2xl p-8 sm:p-10 border border-border card-hover">
+        <div class="flex items-start gap-6">
+          <div class="w-12 h-12 flex-shrink-0 rounded-xl bg-accent/10 flex items-center justify-center border border-accent/20">
+            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          </div>
+          <div>
+            <h2 class="font-display font-bold text-2xl text-fg mb-4">3. Information Sharing and Disclosure</h2>
+            <div class="prose text-muted max-w-none">
+              <p>BdDoc24 does not sell, trade, or rent your personal identification information to others. We may share generic aggregated demographic information not linked to any personal identification information regarding visitors and users with our business partners and trusted affiliates for the purposes outlined above.</p>
+              <p>Information publicly displayed on provider profiles (such as name, specialty, and hospital affiliation) is considered public information and is accessible to all users of the site.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Data Security -->
+      <div class="stagger-reveal bg-card rounded-2xl p-8 sm:p-10 border border-border card-hover">
+        <div class="flex items-start gap-6">
+          <div class="w-12 h-12 flex-shrink-0 rounded-xl bg-accent/10 flex items-center justify-center border border-accent/20">
+            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          </div>
+          <div>
+            <h2 class="font-display font-bold text-2xl text-fg mb-4">4. Data Security</h2>
+            <div class="prose text-muted max-w-none">
+              <p>We adopt appropriate data collection, storage, and processing practices and security measures to protect against unauthorized access, alteration, disclosure, or destruction of your personal information and data stored on our site. However, no method of transmission over the Internet or method of electronic storage is 100% secure.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5: Your Rights & Third Parties -->
+      <div class="stagger-reveal bg-card rounded-2xl p-8 sm:p-10 border border-border card-hover">
+        <div class="flex items-start gap-6">
+          <div class="w-12 h-12 flex-shrink-0 rounded-xl bg-accent/10 flex items-center justify-center border border-accent/20">
+            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          </div>
+          <div>
+            <h2 class="font-display font-bold text-2xl text-fg mb-4">5. Your Rights & Third-Party Links</h2>
+            <div class="prose text-muted max-w-none">
+                <p><strong>Your Rights:</strong> You have the right to request access to the personal data we hold about you. If you are a registered provider, you may access and update your profile information through your dashboard. For other requests or corrections, please contact us.</p>
+                <p><strong>Third-Party Websites:</strong> Our site may contain links to other websites. We are not responsible for their privacy practices and encourage you to read their privacy statements.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6: Changes and Contact -->
+      <div class="stagger-reveal bg-card rounded-2xl p-8 sm:p-10 border border-border card-hover">
+        <div class="flex items-start gap-6">
+          <div class="w-12 h-12 flex-shrink-0 rounded-xl bg-accent/10 flex items-center justify-center border border-accent/20">
+            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          </div>
+          <div>
+            <h2 class="font-display font-bold text-2xl text-fg mb-4">6. Changes to This Policy & Contact</h2>
+            <div class="prose text-muted max-w-none">
+              <p>BdDoc24 has the discretion to update this privacy policy at any time. When we do, we will revise the "Last Updated" date at the top of this page. We encourage you to frequently check this page for any changes.</p>
+              <p>If you have any questions about this Privacy Policy, please contact us at: <a href="{% url 'contact_us' %}" class="text-accent hover:text-accent/80 no-underline"><b>Contact Us</b></a>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+{% endblock %}
