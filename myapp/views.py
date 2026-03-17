@@ -1,12 +1,14 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count, Avg
-# Import DoctorReview and HospitalReview instead of the old Review
 from .models import Doctor, Hospital, Specialty, DoctorReview, HospitalReview
 from django.core.paginator import Paginator
+from django.contrib import messages
+from .forms import ContactForm
 from django.db.models.functions import Coalesce
 import json
 
-# This helper function now uses DoctorReview
+
+
 def get_search_bar_context():
     """Helper function to get all data needed for the search bar."""
     specialties_for_search = Specialty.objects.all().order_by('name')
@@ -209,9 +211,50 @@ def about_us(request):
     return render(request, 'myapp/about.html', context)
 
 
-def contact_us(request ):
+# def contact_us(request ):
+#     search_context = get_search_bar_context()
+#     return render(request, 'myapp/contact.html', search_context)
+def contact_us(request):
+    """
+    Renders the Contact Us page and handles form submission.
+    """
     search_context = get_search_bar_context()
-    return render(request, 'myapp/contact.html', search_context)
+
+    if request.method == 'POST':
+        # If the form is being submitted, create a form instance and populate it with data from the request
+        form = ContactForm(request.POST)
+        
+        # Check if the form data is valid
+        if form.is_valid():
+            # Process the form data (e.g., send an email)
+            # For now, we'll just print it to the console as a demonstration
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            message_content = form.cleaned_data['message']
+            
+            print(f"--- New Contact Form Submission ---")
+            print(f"Name: {first_name} {last_name}")
+            print(f"Email: {email}")
+            print(f"Message: {message_content}")
+            print(f"------------------------------------")
+
+            # Add a success message to be displayed on the next page
+            messages.success(request, "Thank you for your message! We will get back to you shortly.")
+            
+            # Redirect the user back to the contact page to prevent re-submission on refresh
+            return redirect('contact_us')
+    else:
+        # If it's a GET request (the user is just visiting the page), create a blank form
+        form = ContactForm()
+
+    # Add the form to our context dictionary
+    context = {
+        **search_context,
+        'form': form,
+    }
+    
+    return render(request, 'myapp/contact.html', context)
 
 def privacy_policy(request):
     search_context = get_search_bar_context()

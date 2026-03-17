@@ -74,24 +74,44 @@
         <!-- Contact Form -->
         <div class="stagger-reveal">
           <h2 class="font-display font-bold text-3xl text-fg mb-6">Send Us a Message</h2>
-          <form action="#" method="POST" class="space-y-6">
+
+          <!-- =================== FORM UPDATE STARTS HERE =================== -->
+          
+          <!-- Display Success Messages -->
+          {% if messages %}
+            {% for message in messages %}
+              <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl relative mb-6" role="alert">
+                <strong class="font-bold">Success!</strong>
+                <span class="block sm:inline">{{ message }}</span>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <!-- The form tag now includes the CSRF token for security -->
+          <form action="{% url 'contact_us' %}" method="POST" class="space-y-6">
+            {% csrf_token %}
+            
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label for="first-name" class="block text-sm font-medium text-muted mb-2">First Name</label>
-                <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+                <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-muted mb-2">First Name</label>
+                {{ form.first_name }}
+                {{ form.first_name.errors }}
               </div>
               <div>
-                <label for="last-name" class="block text-sm font-medium text-muted mb-2">Last Name</label>
-                <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+                <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-muted mb-2">Last Name</label>
+                {{ form.last_name }}
+                {{ form.last_name.errors }}
               </div>
             </div>
             <div>
-              <label for="email" class="block text-sm font-medium text-muted mb-2">Email Address</label>
-              <input type="email" name="email" id="email" autocomplete="email" class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent">
+              <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-muted mb-2">Email Address</label>
+              {{ form.email }}
+              {{ form.email.errors }}
             </div>
             <div>
-              <label for="message" class="block text-sm font-medium text-muted mb-2">Message</label>
-              <textarea id="message" name="message" rows="4" class="w-full pl-4 pr-4 py-3 rounded-xl bg-bg border border-border text-fg focus:outline-none focus:border-accent"></textarea>
+              <label for="{{ form.message.id_for_label }}" class="block text-sm font-medium text-muted mb-2">Message</label>
+              {{ form.message }}
+              {{ form.message.errors }}
             </div>
             <div>
               <button type="submit" class="w-full sm:w-auto px-8 py-4 bg-bccent text-fg font-semibold rounded-xl hover:opacity-90 transition-all active:scale-95 shadow-sm">
@@ -99,6 +119,7 @@
               </button>
             </div>
           </form>
+          <!-- =================== FORM UPDATE ENDS HERE ===================== -->
         </div>
 
         <!-- Map & Address -->
