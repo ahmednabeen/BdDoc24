@@ -119,3 +119,20 @@ class HospitalReview(models.Model):
 
     def __str__(self):
         return f"Review for {self.hospital.name} by {self.patient_name}"
+
+
+class ContactMessage(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False) # A useful field to track which messages you've handled
+
+    class Meta:
+        # Order messages by most recent first in the admin panel
+        ordering = ['-submitted_at']
+
+    def __str__(self):
+        return f"Message from {self.first_name} {self.last_name} on {self.submitted_at.strftime('%Y-%m-%d')}"
+# ======================================================================

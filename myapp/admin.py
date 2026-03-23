@@ -1,6 +1,6 @@
 from django.contrib import admin
 # Import DoctorReview instead of Review
-from .models import Doctor, Specialty, Hospital, Experience, DoctorReview, HospitalReview
+from .models import Doctor, Specialty, Hospital, Experience, DoctorReview, HospitalReview, ContactMessage
 
 @admin.register(Specialty)
 class SpecialtyAdmin(admin.ModelAdmin):
@@ -80,3 +80,15 @@ class HospitalReviewAdmin(admin.ModelAdmin):
     list_filter = ('hospital', 'rating', 'created_at')
     search_fields = ('hospital__name', 'patient_name', 'comment')
     readonly_fields = ('created_at',)
+
+# ==========================================================
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'email', 'submitted_at', 'is_read')
+    list_filter = ('is_read', 'submitted_at')
+    search_fields = ('first_name', 'last_name', 'email', 'message')
+    readonly_fields = ('first_name', 'last_name', 'email', 'message', 'submitted_at')
+
+    # This allows you to change the 'is_read' status directly from the list view
+    list_editable = ('is_read',)

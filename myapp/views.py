@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count, Avg
-from .models import Doctor, Hospital, Specialty, DoctorReview, HospitalReview
+from .models import Doctor, Hospital, Specialty, DoctorReview, HospitalReview, ContactMessage
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
 from django.contrib import messages
 from .forms import ContactForm
 from django.db.models.functions import Coalesce
-import json
+import json  
 
 
 
@@ -211,44 +212,44 @@ def about_us(request):
     return render(request, 'myapp/about.html', context)
 
 
-# def contact_us(request ):
-#     search_context = get_search_bar_context()
-#     return render(request, 'myapp/contact.html', search_context)
 def contact_us(request):
     """
     Renders the Contact Us page and handles form submission.
+    Saves the message to the database and sends an email notification.
     """
     search_context = get_search_bar_context()
 
     if request.method == 'POST':
-        # If the form is being submitted, create a form instance and populate it with data from the request
         form = ContactForm(request.POST)
         
-        # Check if the form data is valid
         if form.is_valid():
-            # Process the form data (e.g., send an email)
-            # For now, we'll just print it to the console as a demonstration
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            email = form.cleaned_data['email']
-            message_content = form.cleaned_data['message']
-            
-            print(f"--- New Contact Form Submission ---")
-            print(f"Name: {first_name} {last_name}")
-            print(f"Email: {email}")
-            print(f"Message: {message_content}")
-            print(f"------------------------------------")
+            # --- Action 1: Save the message to the database ---
+            ContactMessage.objects.create(
+                first_name=form.cleaned_data['first_name'],
+                last_name=form.cleaned_data['last_name'],
+                email=form.cleaned_data['email'],
+                message=form.cleaned_data['message'],
+            )
 
-            # Add a success message to be displayed on the next page
-            messages.success(request, "Thank you for your message! We will get back to you shortly.")
-            
-            # Redirect the user back to the contact page to prevent re-submission on refresh
+            # --- Action 2: Send an email notification ---
+            send_mail(
+                subject=f"New Contact Message from: {form.cleaned_data['first_name']} {form.cleaned_data['last_name']}",
+                message=(
+                    f"You have a new message from:\n"
+                    f"Name: {form.cleaned_data['first_name']} {form.cleaned_data['last_name']}\n"
+                    f"Email: {form.cleaned_data['email']}\n\n"
+                    f"Message:\n{form.cleaned_data['message']}"
+                ),
+                from_email=None,  # Uses EMAIL_HOST_USER from settings.py
+                recipient_list=['your.admin.email@example.com'], # IMPORTANT: Change this to your email!
+                fail_silently=False, # Set to True in production if you don't want errors to stop the page
+            )
+
+            messages.success(request, "Thank you for your message! We have received it and will get back to you shortly.")
             return redirect('contact_us')
     else:
-        # If it's a GET request (the user is just visiting the page), create a blank form
         form = ContactForm()
 
-    # Add the form to our context dictionary
     context = {
         **search_context,
         'form': form,
