@@ -75,20 +75,25 @@ def home(request):
     }
     return render(request, 'myapp/index.html', context)
 
+
+
 def all_doctors(request):
     search_context = get_search_bar_context()
-    doctors = Doctor.objects.annotate(
+    doctors_list = Doctor.objects.annotate(
         review_count=Count('reviews'),
         avg_rating=Coalesce(Avg('reviews__rating'), 0.0)
     ).order_by('name')
     specialties_for_tabs = Specialty.objects.annotate(doctor_count=Count('doctor')).filter(doctor_count__gt=0)
-    
+    paginator = Paginator(doctors_list, 12) 
+    page_number = request.GET.get('page')
+    doctors_page_obj = paginator.get_page(page_number)
     context = {
         **search_context,
-        'doctors': doctors,
+        'doctors': doctors_page_obj, 
         'specialties': specialties_for_tabs,
     }
     return render(request, 'myapp/doctors_detail.html', context)
+
 
 def doctor_single(request, slug):
     search_context = get_search_bar_context()

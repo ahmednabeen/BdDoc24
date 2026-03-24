@@ -157,8 +157,6 @@
                 </button>
               </div>
           </form>
-
-          <!-- This tag safely passes the division-to-district mapping to your JavaScript -->
           {{ division_district_map|json_script:"division-district-data" }}
 
 
@@ -237,29 +235,58 @@
 
         </div>
 
-        <!-- Pagination Placeholder -->
-        <nav class="flex flex-col sm:flex-row justify-center items-center mt-16 gap-4" aria-label="Pagination">
-          <span class="px-6 py-3 bg-card border border-border rounded-xl text-muted font-semibold cursor-not-allowed flex items-center gap-2 opacity-50">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            Previous
-          </span>
+        <!-- ===================  PAGINATION STARTS HERE =================== -->
 
+        {% if doctors.has_other_pages %}
+        <nav class="flex flex-col sm:flex-row justify-center items-center mt-16 gap-4" aria-label="Pagination">
+
+          <!-- Previous Button -->
+          {% if doctors.has_previous %}
+            <a href="?page={{ doctors.previous_page_number }}" class="px-6 py-3 bg-card border border-border rounded-xl text-fg font-semibold flex items-center gap-2 hover:border-accent hover:text-accent transition-all">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              Previous
+            </a>
+          {% else %}
+            <span class="px-6 py-3 bg-card border border-border rounded-xl text-muted font-semibold cursor-not-allowed flex items-center gap-2 opacity-50">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              Previous
+            </span>
+          {% endif %}
+
+          <!-- Page Numbers -->
           <div class="flex items-center gap-2">
-            <span class="px-4 py-2 bg-accent text-white rounded-lg font-bold border border-accent">1</span>
-            <a href="#" class="px-4 py-2 bg-card border border-border rounded-lg text-fg font-medium hover:border-accent hover:text-accent transition-all">2</a>
-            <a href="#" class="px-4 py-2 bg-card border border-border rounded-lg text-fg font-medium hover:border-accent hover:text-accent transition-all">3</a>
-            <span class="px-4 py-2 text-muted">...</span>
-            <a href="#" class="px-4 py-2 bg-card border border-border rounded-lg text-fg font-medium hover:border-accent hover:text-accent transition-all">10</a>
+            {% for i in doctors.paginator.page_range %}
+              {% if doctors.number == i %}
+                <!-- Current Page -->
+                <span class="px-4 py-2 bg-accent text-white rounded-lg font-bold border border-accent">{{ i }}</span>
+              {% elif i > doctors.number|add:'-3' and i < doctors.number|add:'3' %}
+                <!-- Other Nearby Pages -->
+                <a href="?page={{ i }}" class="px-4 py-2 bg-card border border-border rounded-lg text-fg font-medium hover:border-accent hover:text-accent transition-all">{{ i }}</a>
+              {% elif i == doctors.number|add:'-3' or i == doctors.number|add:'3' %}
+                <!-- Ellipsis for pages further away -->
+                <span class="px-4 py-2 text-muted">...</span>
+              {% endif %}
+            {% endfor %}
           </div>
 
-          <a href="#" class="px-6 py-3 bg-accent text-white rounded-xl font-semibold transition-all flex items-center gap-2 shadow-sm">
-            Next
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
+          <!-- Next Button -->
+          {% if doctors.has_next %}
+            <a href="?page={{ doctors.next_page_number }}" class="px-6 py-3 bg-accent text-white rounded-xl font-semibold transition-all flex items-center gap-2 shadow-sm">
+              Next
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          {% else %}
+            <span class="px-6 py-3 bg-accent text-white rounded-xl font-semibold transition-all flex items-center gap-2 shadow-sm opacity-50 cursor-not-allowed">
+              Next
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </span>
+          {% endif %}
         </nav>
+
         <p class="text-center text-muted text-sm mt-4">
-          Showing page 1 of 1
+          Showing page {{ doctors.number }} of {{ doctors.paginator.num_pages }}
         </p>
+        {% endif %}
 
       </div>
     </section>
