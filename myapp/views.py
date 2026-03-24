@@ -121,15 +121,9 @@ def hospital_detail(request):
     }
     return render(request, 'myapp/hospital_detail.html', context)
 
-def hospital_single(request, id):
+def hospital_single(request, slug):
     search_context = get_search_bar_context()
-    hospital = get_object_or_404(
-        Hospital.objects.annotate(
-            review_count=Count('reviews'),
-            avg_rating=Coalesce(Avg('reviews__rating'), 0.0)
-        ), 
-        id=id
-    )
+    hospital = get_object_or_404(Hospital, slug=slug)
     doctors_at_hospital = Doctor.objects.filter(hospital=hospital).annotate(
         review_count=Count('reviews'),
         avg_rating=Coalesce(Avg('reviews__rating'), 0.0)

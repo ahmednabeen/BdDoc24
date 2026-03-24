@@ -142,7 +142,7 @@
 
               </div>
               
-              <a href="{% url 'hospital_single' hospital.id %}" class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">View Details</a>
+              <a href="{% url 'hospital_single' hospital.slug %}" class="block w-full py-3 border-2 border-border bg-blue-100 text-fg font-bold rounded-xl hover:border-accent hover:text-accent transition-all active:scale-[0.98] text-center mt-auto">View Details</a>
             </div>
           </div>
           {% empty %}

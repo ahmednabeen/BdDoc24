@@ -24,6 +24,12 @@ class Specialty(models.Model):
 
 class Hospital(models.Model):
     name = models.CharField(max_length=200)
+    slug = models.SlugField(
+        max_length=255, 
+        unique=True, 
+        blank=True, 
+        help_text="Unique URL-friendly identifier for the hospital."
+    )
     division = models.CharField(max_length=100, null=True, blank=True)
     district = models.CharField(max_length=100, null=True, blank=True)
     address = models.TextField(blank=True, null=True)
@@ -44,6 +50,20 @@ class Hospital(models.Model):
         if self.division:
             parts.append(self.division)
         return ", ".join(parts)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            # Create a base slug from the name
+            base_slug = slugify(self.name)
+            slug = base_slug
+            counter = 1
+            # Ensure the slug is unique by appending a number if it already exists
+            while Hospital.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
 
 class Doctor(models.Model):
     name = models.CharField(max_length=100)
