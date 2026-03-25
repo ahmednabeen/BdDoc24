@@ -229,7 +229,7 @@ def searchhos(request):
     hospitals = Hospital.objects.annotate(
         review_count=Count('reviews'),
         avg_rating=Coalesce(Avg('reviews__rating'), 0.0)
-    )
+    ).order_by('name')
 
     name = request.GET.get('name')
     division = request.GET.get('division')
@@ -244,14 +244,14 @@ def searchhos(request):
 
     paginator = Paginator(hospitals, 6)
     page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
+    hospitals_page_obj = paginator.get_page(page_number)
+    
     context = {
         **search_context,
-        'page_obj': page_obj,
-        'hospitals': page_obj,
+        'hospitals': hospitals_page_obj,
     }
     return render(request, 'myapp/search_page_hos.html', context)
+
 
 
 def about_us(request):
