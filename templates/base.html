@@ -74,8 +74,10 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
               </svg>
             </button>
-            <button class="hidden sm:flex px-4 py-2 bg-bccent text-fg font-semibold rounded-lg hover:opacity-90 transition-opacity">
-              List Your Practice
+            <button>
+              <a href="{% url 'list_your_practice' %}" class="hidden sm:flex px-4 py-2 bg-bccent text-fg font-semibold rounded-lg hover:opacity-90 transition-opacity">
+                List Your Practice
+              </a>
             </button>
             <!-- Mobile Menu -->
             <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-blue-600 transition-colors" aria-label="Open menu">
@@ -151,7 +153,7 @@
         <div>
           <p class="font-semibold text-white mb-4"><b><i>For Doctors</i></b></p>
           <ul class="space-y-2 text-sm text-gray-200">
-            <li><a href="#" class="hover:text-white transition-colors">Create Profile</a></li>
+            <li><a href="{% url 'list_your_practice' %}" class="hover:text-white transition-colors">Create Profile (Doctor)</a></li>
             <li><a href="#" class="hover:text-white transition-colors">Doctor Dashboard</a></li>
             <li><a href="#" class="hover:text-white transition-colors">Patient Reviews</a></li>
             <li><a href="#" class="hover:text-white transition-colors">Verification</a></li>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Doctor, Specialty, Hospital, Experience, DoctorReview, HospitalReview, ContactMessage
+from .models import Doctor, Specialty, Hospital, Experience, DoctorReview, HospitalReview, ContactMessage, DoctorSubmission
 
 @admin.register(Specialty)
 class SpecialtyAdmin(admin.ModelAdmin):
@@ -86,3 +86,24 @@ class ContactMessageAdmin(admin.ModelAdmin):
     search_fields = ('first_name', 'last_name', 'email', 'message')
     readonly_fields = ('first_name', 'last_name', 'email', 'message', 'submitted_at')
     list_editable = ('is_read',) # This allows you to change the 'is_read' status directly from the list view
+
+
+@admin.register(DoctorSubmission)
+class DoctorSubmissionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'specialty', 'submitted_at', 'is_approved')
+    list_filter = ('is_approved', 'submitted_at', 'specialty')
+    search_fields = ('name', 'email', 'bmdc_registration_number')
+    readonly_fields = (
+        'name', 'email', 'phone_number', 'bmdc_registration_number', 
+        'profile_picture', 'specialty', 'qualifications', 'location', 
+        'years_of_practice', 'current_designation', 'current_workplace',
+        'previous_designation', 'previous_workplace', 'submitted_at'
+    )
+    fieldsets = (
+        ('Submission Status', {
+            'fields': ('is_approved',)
+        }),
+        ('Submitted Information', {
+            'fields': readonly_fields
+        }),
+    )

@@ -150,9 +150,36 @@ class ContactMessage(models.Model):
     is_read = models.BooleanField(default=False) # A useful field to track which messages you've handled
 
     class Meta:
-        # Order messages by most recent first in the admin panel
         ordering = ['-submitted_at']
 
     def __str__(self):
         return f"Message from {self.first_name} {self.last_name} on {self.submitted_at.strftime('%Y-%m-%d')}"
-# ======================================================================
+
+
+class DoctorSubmission(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+    profile_picture = models.ImageField(upload_to='doctor_submissions/', blank=True, null=True)
+    
+    # Add default='' to the location field
+    location = models.CharField(max_length=255, help_text="e.g., Mirpur, Dhaka", default='') 
+    
+    # Add default=0 to the years_of_practice field
+    years_of_practice = models.PositiveIntegerField(default=0)
+    bmdc_registration_number = models.CharField(max_length=100)
+    specialty = models.CharField(max_length=100)
+    qualifications = models.TextField()
+    current_workplace = models.CharField(max_length=200)
+    current_designation = models.CharField(max_length=200, blank=True)
+    previous_workplace = models.CharField(max_length=200, blank=True, null=True)
+    previous_designation = models.CharField(max_length=200, blank=True, null=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False, help_text="Check this box after you have verified and created a Doctor profile.")
+
+    def __str__(self):
+        return f"Submission from {self.name} on {self.submitted_at.strftime('%Y-%m-%d')}"
+
+    class Meta:
+        ordering = ['-submitted_at'] # Show the newest submissions first
+

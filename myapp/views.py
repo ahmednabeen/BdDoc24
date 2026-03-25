@@ -4,7 +4,7 @@ from .models import Doctor, Hospital, Specialty, DoctorReview, HospitalReview, C
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import ContactForm
+from .forms import ContactForm, DoctorSubmissionForm
 from django.db.models.functions import Coalesce
 import json  
 
@@ -316,7 +316,31 @@ def privacy_policy(request):
     search_context = get_search_bar_context()
     return render(request, 'myapp/privacy_policy.html', search_context)
 
+
 def terms_of_service(request):
     search_context = get_search_bar_context()
     return render(request, 'myapp/terms_of_service.html', search_context)
 
+
+def list_your_practice(request):
+    search_context = get_search_bar_context() 
+
+    if request.method == 'POST':
+        # =================== CRITICAL CHANGE HERE ===================
+        # You must include request.FILES to handle the image upload
+        form = DoctorSubmissionForm(request.POST, request.FILES)
+        # ============================================================
+        
+        if form.is_valid():
+            form.save() 
+            messages.success(request, "Thank you! Your submission has been received. We will review it and get back to you shortly.")
+            return redirect('list_your_practice')
+    else:
+        form = DoctorSubmissionForm()
+
+    context = {
+        **search_context,
+        'form': form,
+    }
+    
+    return render(request, 'myapp/list_your_practice.html', context)
