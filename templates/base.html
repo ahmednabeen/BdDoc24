@@ -193,128 +193,156 @@
   </footer>
 
   <script>
-      // 1. Mobile Menu Toggle
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const mobileMenu = document.getElementById('mobileMenu');
-      if (mobileMenuBtn) {
-          mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-      }
+    // ======================================================================
+    // ===================  MAIN SCRIPT INITIALIZATION ======================
+    // ======================================================================
+    document.addEventListener('DOMContentLoaded', function() {
 
-      // 2. Theme Toggle
-      const themeToggle = document.getElementById('themeToggle');
-      if (themeToggle) {
-          themeToggle.addEventListener('click', () => document.documentElement.classList.toggle('dark'));
-      }
+        // --- 1. Mobile Menu Toggle ---
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        }
 
-      // 3. Search Tab Switching (Home Page)
-      function switchTab(tab) {
-        const doctorForm = document.getElementById('doctorSearchForm');
-        const hospitalForm = document.getElementById('hospitalSearchForm');
-        const doctorTab = document.getElementById('doctorTab');
-        const hospitalTab = document.getElementById('hospitalTab');
-        if (doctorForm && hospitalForm && doctorTab && hospitalTab) {
-          if (tab === 'doctor') {
-            doctorForm.classList.remove('hidden');
-            hospitalForm.classList.add('hidden');
-            doctorTab.classList.add('bg-card', 'shadow-sm');
-            hospitalTab.classList.remove('bg-card', 'shadow-sm');
-          } else {
-            hospitalForm.classList.remove('hidden');
-            doctorForm.classList.add('hidden');
-            hospitalTab.classList.add('bg-card', 'shadow-sm');
-            doctorTab.classList.remove('bg-card', 'shadow-sm');
-          }
+        // --- 2. Theme Toggle ---
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => document.documentElement.classList.toggle('dark'));
+        }
+
+        // --- 3. Dependent Dropdown Logic (for Hospital Search) ---
+        const divisionSelect = document.getElementById('division-select');
+        const districtSelect = document.getElementById('district-select');
+        const hospitalDataElement = document.getElementById('division-district-data');
+
+        if (divisionSelect && districtSelect && hospitalDataElement) {
+            const divisionDistrictMap = JSON.parse(hospitalDataElement.textContent);
+
+            divisionSelect.addEventListener('change', function() {
+                const selectedDivision = this.value;
+                districtSelect.innerHTML = '<option value="">Select District</option>';
+
+                if (selectedDivision && divisionDistrictMap[selectedDivision]) {
+                    const districts = divisionDistrictMap[selectedDivision];
+                    districts.forEach(function(district) {
+                        const option = document.createElement('option');
+                        option.value = district;
+                        option.textContent = district;
+                        districtSelect.appendChild(option);
+                    });
+                }
+            });
+        }
+
+        // =================== NEW: DOCTOR DEPENDENT DROPDOWN LOGIC ===================
+        const specialtySelect = document.getElementById('specialty-select');
+        const citySelect = document.getElementById('doctor-city-select');
+        const doctorDataElement = document.getElementById('specialty-city-data');
+
+        if (specialtySelect && citySelect && doctorDataElement) {
+            const specialtyCityMap = JSON.parse(doctorDataElement.textContent);
+
+            specialtySelect.addEventListener('change', function() {
+                const selectedSpecialty = this.value;
+                citySelect.innerHTML = '<option value="">Select City</option>';
+
+                if (selectedSpecialty && specialtyCityMap[selectedSpecialty]) {
+                    const cities = specialtyCityMap[selectedSpecialty];
+                    cities.forEach(function(city) {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        citySelect.appendChild(option);
+                    });
+                }
+            });
+        }
+        // ==========================================================================
+
+        // --- 5. Scroll Reveal (runs on all pages) ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.stagger-reveal').forEach(el => observer.observe(el));
+    });
+
+    // ======================================================================
+    // ===================  GLOBAL HELPER FUNCTIONS =========================
+    // ======================================================================
+    // These functions are defined globally so they can be called from anywhere.
+
+    // --- Search Tab Switching ---
+    function switchTab(tab) {
+      const doctorForm = document.getElementById('doctorSearchForm');
+      const hospitalForm = document.getElementById('hospitalSearchForm');
+      const doctorTab = document.getElementById('doctorTab');
+      const hospitalTab = document.getElementById('hospitalTab');
+      if (doctorForm && hospitalForm && doctorTab && hospitalTab) {
+        if (tab === 'doctor') {
+          doctorForm.classList.remove('hidden');
+          hospitalForm.classList.add('hidden');
+          doctorTab.classList.add('bg-card', 'shadow-sm');
+          hospitalTab.classList.remove('bg-card', 'shadow-sm');
+        } else {
+          hospitalForm.classList.remove('hidden');
+          doctorForm.classList.add('hidden');
+          hospitalTab.classList.add('bg-card', 'shadow-sm');
+          doctorTab.classList.remove('bg-card', 'shadow-sm');
         }
       }
+    }
 
-      // 4. Doctor Specialty Filter
-      function filterDoctors(category) {
-        const cards = document.querySelectorAll('.doctor-card');
-        const tabs = document.querySelectorAll('.specialty-tab');
-        tabs.forEach(tab => {
-          if (tab.getAttribute('onclick') === `filterDoctors('${category}')`) {
-            tab.classList.add('active');
-            tab.classList.remove('text-muted');
-          } else {
-            tab.classList.remove('active');
-            tab.classList.add('text-muted');
-          }
-        });
-        cards.forEach(card => {
-          if (category === 'all' || card.classList.contains(category)) {
-            card.style.display = 'block';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      }
-
-      // 5. Hospital Division Filter
-      function filterHospitals(category) {
-        const cards = document.querySelectorAll('.hospital-card');
-        const tabs = document.querySelectorAll('.specialty-tab');
-        tabs.forEach(tab => {
-          if (tab.getAttribute('onclick') === `filterHospitals('${category}')`) {
-            tab.classList.add('active');
-            tab.classList.remove('text-muted');
-          } else {
-            tab.classList.remove('active');
-            tab.classList.add('text-muted');
-          }
-        });
-        cards.forEach(card => {
-          if (category === 'all' || card.classList.contains(category)) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      }
-
-      // =================== NEW: DEPENDENT DROPDOWN LOGIC ===================
-      document.addEventListener('DOMContentLoaded', function() {
-          const divisionSelect = document.getElementById('division-select');
-          const districtSelect = document.getElementById('district-select');
-          const dataElement = document.getElementById('division-district-data');
-
-          // Only run this if the search form elements are on the page
-          if (divisionSelect && districtSelect && dataElement) {
-              const divisionDistrictMap = JSON.parse(dataElement.textContent);
-
-              divisionSelect.addEventListener('change', function() {
-                  const selectedDivision = this.value;
-                  
-                  // Clear existing district options
-                  districtSelect.innerHTML = '<option value="">Select District</option>';
-
-                  if (selectedDivision && divisionDistrictMap[selectedDivision]) {
-                      // Get the list of districts for the selected division
-                      const districts = divisionDistrictMap[selectedDivision];
-                      
-                      // Create and add new options to the district dropdown
-                      districts.forEach(function(district) {
-                          const option = document.createElement('option');
-                          option.value = district;
-                          option.textContent = district;
-                          districtSelect.appendChild(option);
-                      });
-                  }
-              });
-          }
+    // --- Doctor Specialty Filter ---
+    function filterDoctors(category) {
+      const cards = document.querySelectorAll('.doctor-card');
+      const tabs = document.querySelectorAll('.specialty-tab');
+      tabs.forEach(tab => {
+        if (tab.getAttribute('onclick') === `filterDoctors('${category}')`) {
+          tab.classList.add('active');
+          tab.classList.remove('text-muted');
+        } else {
+          tab.classList.remove('active');
+          tab.classList.add('text-muted');
+        }
       });
-      // =================== END OF NEW LOGIC =====================
+      cards.forEach(card => {
+        if (category === 'all' || card.classList.contains(category)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
 
-      // 7. Scroll Reveal
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, { threshold: 0.1 });
+    // --- Hospital Division Filter ---
+    function filterHospitals(category) {
+      const cards = document.querySelectorAll('.hospital-card');
+      const tabs = document.querySelectorAll('.specialty-tab');
+      tabs.forEach(tab => {
+        if (tab.getAttribute('onclick') === `filterHospitals('${category}')`) {
+          tab.classList.add('active');
+          tab.classList.remove('text-muted');
+        } else {
+          tab.classList.remove('active');
+          tab.classList.add('text-muted');
+        }
+      });
+      cards.forEach(card => {
+        if (category === 'all' || card.classList.contains(category)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+</script>
 
-      document.querySelectorAll('.stagger-reveal').forEach(el => observer.observe(el));
-  </script>
+
 
 
 

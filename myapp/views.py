@@ -10,12 +10,65 @@ import json
 
 
 
-def get_search_bar_context():
-    """Helper function to get all data needed for the search bar."""
-    specialties_for_search = Specialty.objects.all().order_by('name')
-    doctor_locations = Doctor.objects.values_list('location', flat=True).distinct().order_by('location')
-    hospital_divisions = Hospital.objects.order_by('division').values_list('division', flat=True).distinct()
+# def get_search_bar_context():
+#     """Helper function to get all data needed for the search bar."""
+#     specialties_for_search = Specialty.objects.all().order_by('name')
+#     doctor_locations = Doctor.objects.values_list('location', flat=True).distinct().order_by('location')
+#     hospital_divisions = Hospital.objects.order_by('division').values_list('division', flat=True).distinct()
     
+#     division_district_map = {}
+#     all_hospitals_locations = Hospital.objects.values('division', 'district').distinct()
+#     for location in all_hospitals_locations:
+#         division = location['division']
+#         district = location['district']
+#         if division and district:
+#             if division not in division_district_map:
+#                 division_district_map[division] = []
+#             if district not in division_district_map[division]:
+#                 division_district_map[division].append(district)
+#     for division in division_district_map:
+#         division_district_map[division].sort()
+        
+#     return {
+#         'specialties': specialties_for_search,
+#         'doctor_locations': doctor_locations,
+#         'hospital_divisions': hospital_divisions,
+#         'division_district_map': division_district_map,
+#     }
+
+def get_search_bar_context():
+    """
+    Provides the necessary context for the search bar on every page.
+    Includes data for both doctor and hospital dependent dropdowns.
+    """
+    # --- Data for Doctor Search ---
+    specialties_for_search = Specialty.objects.all().order_by('name')
+    
+    # =================== NEW LOGIC FOR DOCTOR DROPDOWNS ===================
+    # Create a dictionary to map each specialty (by its slug) to a list of cities
+    specialty_city_map = {}
+    # Get all unique combinations of doctor specialties and their locations
+    doctor_locations_qs = Doctor.objects.values('specialties__slug', 'location').distinct()
+
+    for item in doctor_locations_qs:
+        specialty_slug = item['specialties__slug']
+        location = item['location']
+        
+        # Ensure both specialty and location exist before adding them
+        if specialty_slug and location:
+            if specialty_slug not in specialty_city_map:
+                specialty_city_map[specialty_slug] = []
+            # Add the city to the list for that specialty if it's not already there
+            if location not in specialty_city_map[specialty_slug]:
+                specialty_city_map[specialty_slug].append(location)
+
+    # Sort the cities within each specialty's list alphabetically
+    for specialty_slug in specialty_city_map:
+        specialty_city_map[specialty_slug].sort()
+    # ====================================================================
+
+    # --- Data for Hospital Search (This part remains the same) ---
+    hospital_divisions = Hospital.objects.order_by('division').values_list('division', flat=True).distinct()
     division_district_map = {}
     all_hospitals_locations = Hospital.objects.values('division', 'district').distinct()
     for location in all_hospitals_locations:
@@ -28,12 +81,15 @@ def get_search_bar_context():
                 division_district_map[division].append(district)
     for division in division_district_map:
         division_district_map[division].sort()
-        
+
+    # --- Return the complete context for the search bar ---
     return {
         'specialties': specialties_for_search,
-        'doctor_locations': doctor_locations,
+        # The old 'doctor_locations' is no longer needed for the dropdowns
         'hospital_divisions': hospital_divisions,
         'division_district_map': division_district_map,
+        # Add the new map for the doctor search
+        'specialty_city_map': specialty_city_map,
     }
 
 def home(request):
@@ -263,3 +319,4 @@ def privacy_policy(request):
 def terms_of_service(request):
     search_context = get_search_bar_context()
     return render(request, 'myapp/terms_of_service.html', search_context)
+
