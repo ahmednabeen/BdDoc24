@@ -3,24 +3,13 @@
     --fg: #0f2922;
     --muted: #5a7268;
     --accent: #22336f;
-    --bccent: #c79031;
+    --bccent: #1f8902;
     --card: #ffffff;
     --border: #d4e0db;
     --gradient-start: #eff6ff; 
     --gradient-end: #dbeafe;
     }
 
-    .dark {
-    --bg: #ffffff;
-    --fg: #0f2922;
-    --muted: #5a7268;
-    --accent: #22336f;
-    --bccent: #c79031;
-    --card: #ffffff;
-    --border: #d4e0db;
-    --gradient-start: #eff6ff; 
-    --gradient-end: #dbeafe;
-    }
 
     * {
       font-family: 'DM Sans', sans-serif;

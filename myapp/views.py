@@ -254,17 +254,10 @@ def searchhos(request):
 
 
 
-def about_us(request):
-    search_context = get_search_bar_context()
-    stats_context = {
-        'doctor_count': Doctor.objects.count(),
-        'hospital_count': Hospital.objects.count(),
-        'districts_covered': Doctor.objects.aggregate(count=Count('location', distinct=True))['count'],
-        'review_count': DoctorReview.objects.count() + HospitalReview.objects.count()
-    }
-    context = {**search_context, **stats_context}
-    
-    return render(request, 'myapp/about.html', context)
+from django.views.generic import TemplateView
+
+class AboutUsView(TemplateView):
+    template_name = 'myapp/about-new.html'
 
 
 def contact_us(request):
