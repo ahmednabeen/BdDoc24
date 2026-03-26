@@ -266,6 +266,17 @@ class AboutUsView(TemplateView):
 class ContactView(TemplateView):
     template_name = 'newapp/contact.html'
 
+@method_decorator(cache_page(60 * 60 * 12), name='dispatch')  # cache for 12 hours
+class VerificationPolicyView(TemplateView):
+    template_name = 'newapp/verification-policy.html'
+
+@method_decorator(cache_page(60 * 60 * 12), name='dispatch')  # cache for 12 hours
+class EditorialPolicyView(TemplateView):
+    template_name = 'newapp/editorial-policy.html'
+
+@method_decorator(cache_page(60 * 60 * 12), name='dispatch')  # cache for 12 hours
+class PrivacyPolicyView(TemplateView):
+    template_name = 'newapp/privacy-policy.html'
 
 # def contact_us(request):
 #     """
