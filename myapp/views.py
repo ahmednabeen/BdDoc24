@@ -257,6 +257,9 @@ def searchhos(request):
 from django.views.generic import TemplateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+def get(self, request, *args, **kwargs):
+    print("VIEW HIT")
+    return super().get(request, *args, **kwargs)
 
 @method_decorator(cache_page(60 * 60 * 12), name='dispatch')  # cache for 12 hours
 class AboutUsView(TemplateView):
@@ -277,6 +280,10 @@ class EditorialPolicyView(TemplateView):
 @method_decorator(cache_page(60 * 60 * 12), name='dispatch')  # cache for 12 hours
 class PrivacyPolicyView(TemplateView):
     template_name = 'newapp/privacy-policy.html'
+
+@method_decorator(cache_page(60 * 60 * 12), name='dispatch')  # cache for 12 hours
+class HospitalListView(TemplateView):
+    template_name = 'newapp/hospital_list.html'
 
 # def contact_us(request):
 #     """

@@ -18,4 +18,5 @@ urlpatterns = [
     path('verification-policy/', VerificationPolicyView.as_view(), name='verification_policy'),
     path('editorial-policy/', EditorialPolicyView.as_view(), name='editorial_policy'),
     path('privacy-policy/', PrivacyPolicyView.as_view(), name='privacy_policy'),
+    path('hospitals/', HospitalListView.as_view(), name='hospital_list'),
 ]
