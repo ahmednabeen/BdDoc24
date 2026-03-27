@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctors List - Rajshahi City Hospital</title>
+  
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Configuration (Based on your @theme definitions) -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            // Maps to --font-display and --font-body
+            display: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            body: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            // Maps to --color-primary
+            primary: { 
+              DEFAULT: '#1d4ed8', 
+              50: '#eff6ff', 
+              600: '#2563eb', 
+              700: '#1d4ed8', 
+              800: '#1e40af', 
+              900: '#1e3a8a' 
+            },
+            // Maps to --color-accent
+            accent: { 
+              DEFAULT: '#0ea5e9', 
+              light: '#e0f2fe' 
+            },
+            // Maps to --color-emerald
+            emerald: { 
+              DEFAULT: '#047857', 
+              600: '#059669', 
+              700: '#047857' 
+            },
+            // Maps to --color-bg and --color-fg
+            bg: '#f8fafc',
+            fg: '#0f172a',
+            // Maps to --color-muted, --color-card, --color-border
+            muted: '#64748b',
+            card: '#ffffff',
+            border: '#e2e8f0',
+            // Maps to --color-bccent
+            bccent: '#059669',     
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen flex flex-col bg-bg text-fg font-body selection:bg-primary selection:text-white">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-primary-900 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-700 to-emerald-900 flex items-center justify-center shadow-md">
+            <svg viewBox="0 0 128 128" class="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="M69.39 58.93c-.89 6.74 10.14 31.36-6.97 38.1c-19.16 7.56-26.31-20.55-31.39-26" stroke="#0ea5e9" stroke-width="8"/>
+               <path d="M60.42 96.03c9.59 21.97 24.29 25.08 35.15 23.19c9.54-1.67 22.17-10.22 22.14-25.72" stroke="#0ea5e9" stroke-width="8"/>
+            </svg>
+          </div>
+          <span class="font-display font-bold text-xl text-white tracking-tight">BdDoc24</span>
+        </a>
+
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#" class="text-white font-bold">Doctors</a>
+          <a href="#" class="text-slate-200 hover:text-white">Hospitals</a>
+          <a href="#" class="text-slate-200 hover:text-white">About</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button class="hidden sm:block">
+            <a href="#" class="px-5 py-2.5 bg-bccent text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-md">
+              List Your Practice
+            </a>
+          </button>
+          <!-- Mobile Menu Button -->
+          <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg bg-primary-800 hover:bg-primary-700 text-white">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-grow pt-16">
+    
+    <!-- 1. Hero Section (Image Right) -->
+    <section class="bg-white py-10 border-b border-border">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row gap-10 items-start">
+          
+          <!-- Left: Content -->
+          <div class="lg:w-2/3 space-y-6">
+            <!-- Breadcrumbs -->
+            <nav class="flex items-center space-x-2 text-sm text-muted">
+              <a href="#" class="hover:text-primary transition-colors">Home</a>
+              <span>/</span>
+              <a href="#" class="hover:text-primary transition-colors">Hospitals</a>
+              <span>/</span>
+              <span class="text-fg font-medium">Rajshahi City Hospital</span>
+            </nav>
+
+            <!-- H1 -->
+            <h1 class="font-display font-bold text-3xl sm:text-4xl text-slate-900 leading-tight">
+                Doctors List of Rajshahi City Hospital (Updated 2026)
+            </h1>
+
+            <!-- Intro -->
+            <p class="text-lg text-slate-600 leading-relaxed">
+                Looking for doctors at Rajshahi City Hospital? Here is a complete and updated list of specialist doctors, their departments, qualifications, and chamber details.
+            </p>
+
+            <!-- Stats Row -->
+            <div class="flex flex-wrap items-center gap-6 text-sm border-b border-slate-100 pb-6">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span class="text-muted">Total Doctors:</span>
+                    <span class="font-bold text-fg">156</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <span class="text-muted">Last Updated:</span>
+                    <span class="font-bold text-fg">Jan 15, 2026</span>
+                </div>
+            </div>
+
+            <!-- Other Information Box -->
+            <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                <h3 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    About Rajshahi City Hospital
+                </h3>
+                <p class="text-slate-700 text-sm leading-relaxed">
+                    Rajshahi City Hospital is a leading tertiary care hospital in the northern region of Bangladesh. Established with a vision to provide affordable yet world-class healthcare, we are equipped with the latest medical technology and a team of highly skilled professionals dedicated to patient well-being.
+                </p>
+            </div>
+          </div>
+
+          <!-- Right: Image + Address -->
+          <div class="lg:w-1/3 w-full lg:sticky lg:top-24 space-y-4">
+             <div class="relative rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+                <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=800&q=80" 
+                     alt="Rajshahi City Hospital Building" 
+                     class="w-full h-64 lg:h-72 object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                   <p class="text-white font-medium">Rajshahi City Hospital</p>
+                   <p class="text-slate-200 text-sm">A leader in healthcare excellence.</p>
+                </div>
+             </div>
+
+             <!-- Address Card -->
+             <div class="bg-white p-5 rounded-xl border border-border shadow-sm">
+                 <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Hospital Address
+                 </h4>
+                 <p class="text-sm text-slate-600 mb-3 leading-relaxed">
+                    House 12, Road 5, Kadirganj,<br>
+                    Seroil, Rajshahi-6000
+                 </p>
+                 <a href="#" class="text-xs text-primary font-semibold hover:underline flex items-center gap-1">
+                    Get Directions 
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                 </a>
+             </div>
+
+             <!-- Emergency Card -->
+             <div class="bg-white p-4 rounded-xl border border-border shadow-sm">
+                 <div class="flex items-center justify-between mb-2">
+                     <h4 class="font-bold text-slate-900 text-sm">Emergency?</h4>
+                     <span class="text-xs text-red-500 font-bold animate-pulse">24/7 Open</span>
+                 </div>
+                 <p class="text-sm text-muted mb-3">Call the hospital emergency helpline immediately.</p>
+                 <a href="tel:+8801712345678" class="block w-full text-center bg-red-50 text-red-600 font-bold py-2 rounded-lg hover:bg-red-100 transition-colors text-sm">
+                    Call Ambulance
+                 </a>
+             </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Hospital Details Section -->
+    <section class="py-10 bg-slate-50 border-b border-border">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-border">
+            <h2 class="font-display font-bold text-2xl text-slate-900 mb-6 pb-4 border-b border-slate-100">Hospital Information</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Left Column: Contact Info -->
+                <div class="space-y-6">
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-blue-50 text-primary flex items-center justify-center mt-1">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 mb-1">Contact Numbers</h3>
+                            <p class="text-sm text-slate-600 font-medium">+880 1712 345678</p>
+                            <p class="text-sm text-slate-600 font-medium">+880 1912 987654</p>
+                            <p class="text-sm text-slate-600 font-medium">+880 7200 112233</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Middle & Right Column: Diagnosis & Facilities -->
+                <div class="md:col-span-2 lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Diagnosis -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                        <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                            Diagnosis & Treatments
+                        </h3>
+                        <p class="text-slate-700 text-sm leading-relaxed">
+                            We provide comprehensive diagnosis and treatment for Cardiology, Neurology, Orthopedics, Gynecology & Obstetrics, General Medicine, Pediatrics, Gastroenterology, and Dermatology. Our emergency unit is equipped to handle trauma and critical care cases 24/7.
+                        </p>
+                    </div>
+
+                    <!-- Facilities -->
+                    <div>
+                        <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            Other Facilities
+                        </h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start gap-2 text-slate-700 text-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5"></span>
+                                24/7 Emergency & Trauma Care
+                            </li>
+                            <li class="flex items-start gap-2 text-slate-700 text-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5"></span>
+                                Modern ICU & CCU
+                            </li>
+                            <li class="flex items-start gap-2 text-slate-700 text-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5"></span>
+                                Advanced Operation Theaters (OT)
+                            </li>
+                            <li class="flex items-start gap-2 text-slate-700 text-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5"></span>
+                                NICU & PICU for Children
+                            </li>
+                            <li class="flex items-start gap-2 text-slate-700 text-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5"></span>
+                                Digital X-Ray, CT Scan & MRI
+                            </li>
+                            <li class="flex items-start gap-2 text-slate-700 text-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-1.5"></span>
+                                In-house Pharmacy & Pathology Lab
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Filter Section -->
+    <section class="py-8 bg-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+            <h2 class="font-display font-bold text-2xl text-slate-900">Doctors List</h2>
+        </div>
+        
+        <!-- Filter Buttons -->
+        <div class="bg-white p-4 rounded-xl border border-border shadow-sm overflow-x-auto">
+            <div class="flex flex-nowrap gap-2 min-w-max sm:flex-wrap">
+                <button class="px-5 py-2 bg-primary text-white font-medium rounded-full text-sm shadow-sm hover:bg-primary-800 transition-colors">
+                    All
+                </button>
+                <button class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    Cardiologist
+                </button>
+                <button class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    Dermatologist
+                </button>
+                <button class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    Gynecologist
+                </button>
+                <button class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    Neurologist
+                </button>
+                <button class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    Pediatrician
+                </button>
+                <button class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    Orthopedic
+                </button>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Doctors List Grid -->
+    <section class="pb-12 bg-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+            <p class="text-slate-600 text-sm font-medium">Showing <span class="font-bold text-fg">156</span> Doctors</p>
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-muted">Sort by:</span>
+                <select class="text-sm border-none bg-transparent font-semibold text-fg focus:ring-0 cursor-pointer">
+                    <option>Top Rated</option>
+                    <option>Newest First</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Doctor Card 1 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=200&q=80" alt="Dr. Abdul Karim" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. Abdul Karim</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Associate Professor</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Department of Neurology</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, FCPS (Neurology), MRCP (UK)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chamber</p>
+                        <p class="text-sm text-slate-700 font-medium">Rajshahi City Hospital, 3rd Floor</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Dr. Abdul Karim is a renowned neurologist with over 15 years of experience in treating stroke, epilepsy, and movement disorders...
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Doctor Card 2 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=200&q=80" alt="Dr. Nasima Akter" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. Nasima Akter</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.8</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Senior Consultant</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Department of Gynecology</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, DGO, FCPS (Gynae & Obs)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chamber</p>
+                        <p class="text-sm text-slate-700 font-medium">Rajshahi City Hospital, Maternity Wing</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Specializing in high-risk pregnancies and infertility treatment, Dr. Nasima provides expert care with a focus on maternal health...
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Doctor Card 3 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="Dr. Rahim Uddin" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. Rahim Uddin</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Associate Professor</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Department of Cardiology</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, MD (Cardiology), FACC</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chamber</p>
+                        <p class="text-sm text-slate-700 font-medium">Rajshahi City Hospital, Cardiac Care Unit</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Dr. Rahim Uddin is an expert in interventional cardiology. He has successfully performed numerous angioplasties and is known for his patient-centric approach...
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Doctor Card 4 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80" alt="Dr. Tahmina Begum" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. Tahmina Begum</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.7</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Associate Professor</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Department of Pediatrics</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, DCH, FCPS (Pediatrics)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chamber</p>
+                        <p class="text-sm text-slate-700 font-medium">Rajshahi City Hospital, Child Health Unit</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Dr. Tahmina specializes in neonatal care and child nutrition. She has a friendly approach that makes children comfortable during consultations...
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Doctor Card 5 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=200&q=80" alt="Dr. Saiful Islam" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. Saiful Islam</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.6</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Assistant Professor</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Department of Dermatology</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, DDV, FCPS (Skin)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chamber</p>
+                        <p class="text-sm text-slate-700 font-medium">Rajshahi City Hospital, Skin OPD</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Dr. Saiful Islam is a specialist in treating acne, eczema, and psoriasis. He uses modern laser technology for cosmetic dermatology procedures...
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Doctor Card 6 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=200&q=80" alt="Dr. Jamal Uddin" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. Jamal Uddin</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.8</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Consultant</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Department of Orthopedics</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, D-Ortho, MS (Ortho)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chamber</p>
+                        <p class="text-sm text-slate-700 font-medium">Rajshahi City Hospital, Trauma Center</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Expert in joint replacement surgeries and sports medicine. Dr. Jamal has over 10 years of experience in complex orthopedic cases...
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-12 flex justify-center gap-2">
+            <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 disabled:opacity-50" disabled>Previous</button>
+            <button class="px-4 py-2 bg-primary text-white rounded-lg font-medium">1</button>
+            <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50">2</button>
+            <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50">3</button>
+            <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50">Next</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div class="col-span-2 md:col-span-1">
+          <a href="/" class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-700 to-emerald-900 flex items-center justify-center">
+               <svg viewBox="0 0 128 128" class="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M69.39 58.93c-.89 6.74 10.14 31.36-6.97 38.1c-19.16 7.56-26.31-20.55-31.39-26" stroke="#0ea5e9" stroke-width="8"/>
+               </svg>
+            </div>
+            <span class="font-display font-bold text-xl text-white">BdDoc24</span>
+          </a>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Your trusted healthcare directory connecting patients with qualified doctors across Bangladesh.
+          </p>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold text-white mb-4">For Patients</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-accent transition-colors">Find a Doctor</a></li>
+            <li><a href="#" class="hover:text-accent transition-colors">Find a Hospital</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold text-white mb-4">For Doctors</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-accent transition-colors">Join BdDoc24</a></li>
+            <li><a href="#" class="hover:text-accent transition-colors">Pricing</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold text-white mb-4">Company</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-accent transition-colors">About Us</a></li>
+            <li><a href="#" class="hover:text-accent transition-colors">Contact</a></li>
+          </ul>
+        </div>
+              </div>
+      
+      <div class="border-t border-slate-800 pt-8 text-center">
+        <p class="text-sm text-slate-500">© 2026 BdDoc24. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    });
+  </script>
+</body>
+</html>

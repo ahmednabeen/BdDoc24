@@ -4,6 +4,20 @@ from django.utils.text import slugify
 from django.templatetags.static import static
 
 
+
+class Location(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(unique=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
 class Specialty(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True, blank=True)
@@ -24,16 +38,9 @@ class Specialty(models.Model):
 
 class Hospital(models.Model):
     name = models.CharField(max_length=200)
-    slug = models.SlugField(
-        max_length=255, 
-        unique=True, 
-        blank=True, 
-        help_text="Unique URL-friendly identifier for the hospital."
-    )
-    division = models.CharField(max_length=100, null=True, blank=True)
-    district = models.CharField(max_length=100, null=True, blank=True)
+    slug = models.SlugField(blank=True, null=True, max_length=255,)
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL,null=True, blank=True)
     address = models.TextField(blank=True, null=True)
-    about = models.TextField(blank=True, null=True, help_text="A general description or overview of the hospital.")
     contact_numbers = models.TextField(
         blank=True, 
         null=True,
@@ -42,144 +49,71 @@ class Hospital(models.Model):
     diagnosis = models.TextField(blank=True, null=True)
     facilities = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='records/images/', blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    about = models.TextField(blank=True, null=True)
+
+
+    def get_contact_numbers_list(self):
+        if not self.contact_numbers:
+            return []
+        return [num.strip() for num in self.contact_numbers.split(",")]
+    
+    def get_facilities_list(self):
+        if not self.facilities:
+            return []
+        return [item.strip() for item in self.facilities.split("\n") if item.strip()]
+
+    
 
     def __str__(self):
-        parts = [self.name]
-        if self.district:
-            parts.append(self.district)
-        if self.division:
-            parts.append(self.division)
-        return ", ".join(parts)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            # Create a base slug from the name
-            base_slug = slugify(self.name)
-            slug = base_slug
-            counter = 1
-            # Ensure the slug is unique by appending a number if it already exists
-            while Hospital.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            self.slug = slug
-        super().save(*args, **kwargs)
-
+        return self.name
 
 class Doctor(models.Model):
     name = models.CharField(max_length=100)
-    location = models.CharField(max_length=200, null=True, blank=True)
-    designation = models.CharField(max_length=100) 
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL,null=True, blank=True)
+    designation = models.CharField(max_length=100) # e.g., "Senior Cardiologist"
     profile_picture = models.ImageField(upload_to='doctors/', null=True, blank=True)
-    qualifications = models.CharField(max_length=255) 
+    qualifications = models.CharField(max_length=255) # e.g., "MBBS, FCPS (Cardiology)"
     experience_years = models.PositiveIntegerField(null=True, blank=True)
     about = models.TextField()
-    specialties = models.ManyToManyField(Specialty, blank=True)
-    
-    hospital = models.ForeignKey(
-        Hospital, 
-        on_delete=models.SET_NULL, 
-        null=True, 
-        blank=True,
-        related_name='doctors' 
-    )
+    specialties = models.ManyToManyField(Specialty,null=True, blank=True)
+    hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True, blank=True,related_name="doctors",)
+    slug = models.SlugField(max_length=255,  unique=True, blank=True, help_text="Unique URL-friendly identifier for the doctor.")
 
-    slug = models.SlugField(max_length=255, unique=True, blank=True, help_text="Unique URL-friendly identifier for the doctor.")
-    is_featured = models.BooleanField(default=False)  
 
     def __str__(self):
         return self.name
     
     def save(self, *args, **kwargs):
-        if not self.slug:
-            super().save(*args, **kwargs)
+        is_new = self._state.adding
+        super().save(*args, **kwargs)
+        if is_new or not self.slug:
             self.slug = f"{slugify(self.name)}-{self.pk}"
-            return super().save(update_fields=['slug'])
-        return super().save(*args, **kwargs)
+            super(Doctor, self).save(update_fields=['slug'])
             
     def get_profile_picture_url(self):
+        """Return the uploaded profile picture URL, or a default static image if none exists."""
         if self.profile_picture and hasattr(self.profile_picture, 'url'):
             return self.profile_picture.url
-        return static('images/default_doctor.jpg')
+        return static('images/default_doctor.jpg')  # path in your /static/images/ folder
 
 class Experience(models.Model):
     doctor = models.ForeignKey(Doctor, related_name='experiences', on_delete=models.CASCADE)
     position = models.CharField(max_length=100)
     hospital_name = models.CharField(max_length=200)
     start_year = models.PositiveIntegerField(null=True, blank=True)
-    end_year = models.PositiveIntegerField(null=True, blank=True)
+    end_year = models.PositiveIntegerField(null=True, blank=True) # Can be ongoing
     description = models.TextField()
 
     def __str__(self):
         return f"{self.position} at {self.hospital_name}"
 
-# =================== RENAMED THIS MODEL ===================
-class DoctorReview(models.Model):
+class Review(models.Model):
     doctor = models.ForeignKey(Doctor, related_name='reviews', on_delete=models.CASCADE)
     patient_name = models.CharField(max_length=100)
     rating = models.FloatField(validators=[MinValueValidator(1.0), MaxValueValidator(5.0)])
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering = ['-created_at']
-
     def __str__(self):
         return f"Review for {self.doctor.name} by {self.patient_name}"
-# ==========================================================
-
-class HospitalReview(models.Model):
-    hospital = models.ForeignKey(Hospital, related_name='reviews', on_delete=models.CASCADE)
-    patient_name = models.CharField(max_length=100)
-    rating = models.FloatField(validators=[MinValueValidator(1.0), MaxValueValidator(5.0)])
-    comment = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return f"Review for {self.hospital.name} by {self.patient_name}"
-
-
-class ContactMessage(models.Model):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    message = models.TextField()
-    submitted_at = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False) # A useful field to track which messages you've handled
-
-    class Meta:
-        ordering = ['-submitted_at']
-
-    def __str__(self):
-        return f"Message from {self.first_name} {self.last_name} on {self.submitted_at.strftime('%Y-%m-%d')}"
-
-
-class DoctorSubmission(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone_number = models.CharField(max_length=20)
-    profile_picture = models.ImageField(upload_to='doctor_submissions/', blank=True, null=True)
-    
-    # Add default='' to the location field
-    location = models.CharField(max_length=255, help_text="e.g., Mirpur, Dhaka", default='') 
-    
-    # Add default=0 to the years_of_practice field
-    years_of_practice = models.PositiveIntegerField(default=0)
-    bmdc_registration_number = models.CharField(max_length=100)
-    specialty = models.CharField(max_length=100)
-    qualifications = models.TextField()
-    current_workplace = models.CharField(max_length=200)
-    current_designation = models.CharField(max_length=200, blank=True)
-    previous_workplace = models.CharField(max_length=200, blank=True, null=True)
-    previous_designation = models.CharField(max_length=200, blank=True, null=True)
-    submitted_at = models.DateTimeField(auto_now_add=True)
-    is_approved = models.BooleanField(default=False, help_text="Check this box after you have verified and created a Doctor profile.")
-
-    def __str__(self):
-        return f"Submission from {self.name} on {self.submitted_at.strftime('%Y-%m-%d')}"
-
-    class Meta:
-        ordering = ['-submitted_at'] # Show the newest submissions first
-
