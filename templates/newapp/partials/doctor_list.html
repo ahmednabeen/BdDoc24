@@ -1,0 +1,86 @@
+        {% for doctor in doctors %}
+        <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+          <!-- Top -->
+          <div class="flex gap-4 mb-4">
+            <!-- Image -->
+            <img
+              src="{{ doctor.get_profile_picture_url }}"
+              alt="{{ doctor.name }}"
+              class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0"
+            />
+
+            <!-- Info -->
+            <div class="flex-1">
+              <div class="flex justify-between items-start">
+                <!-- Name -->
+                <h3 class="font-bold text-xl text-slate-900 leading-tight">
+                  {{ doctor.name }}
+                </h3>
+              </div>
+
+              <!-- Designation -->
+              <p class="text-primary font-medium text-sm">
+                {{ doctor.designation }}
+              </p>
+
+              <!-- Specialty (first one) -->
+              <p class="text-emerald-600 font-semibold text-xs mt-1">
+                {% with doctor.specialties.all|first as sp %} {{ sp.name }} {% endwith %}
+              </p>
+
+              <div
+                class="flex items-center gap-1 mt-2 text-amber-600 font-semibold text-sm"
+              >
+                ⭐
+                <span>{{ doctor.avg_rating|default:"0.0"|floatformat:1 }}</span>
+                <span class="text-xs text-slate-500"
+                  >({{ doctor.review_count }} Reviews)</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle -->
+          <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+            <!-- Education -->
+            <div>
+              <p
+                class="text-xs text-muted uppercase tracking-wide font-bold mb-1"
+              >
+                Education
+              </p>
+              <p class="text-sm text-slate-700 font-medium leading-snug">
+                {{ doctor.qualifications }}
+              </p>
+            </div>
+
+            <!-- Chamber -->
+            <div>
+              <p
+                class="text-xs text-muted uppercase tracking-wide font-bold mb-1"
+              >
+                Chamber
+              </p>
+              <p class="text-sm text-slate-700 font-medium">
+                {{ doctor.hospital.name }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Bottom -->
+          <div class="mt-auto pt-2">
+            <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+              {{ doctor.about|truncatewords:20 }}
+            </p>
+
+            <a
+              href="#"
+              class="inline-flex items-center text-primary font-bold hover:underline text-sm"
+            >
+              View Full Profile
+            </a>
+          </div>
+        </div>
+        {% empty %}
+        <p class="text-slate-500">No doctors found.</p>
+        {% endfor %}

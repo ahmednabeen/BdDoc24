@@ -257,27 +257,37 @@
       </div>
 
       <!-- Filter Buttons -->
-      <div
-        class="bg-white p-4 rounded-xl border border-border shadow-sm overflow-x-auto"
-      >
-        <div class="flex flex-nowrap gap-2 min-w-max sm:flex-wrap">
-          <!-- All button -->
-          <button
-            class="px-5 py-2 bg-primary text-white font-medium rounded-full text-sm shadow-sm hover:bg-primary-800 transition-colors"
-          >
-            All
-          </button>
+<div class="bg-white p-4 rounded-xl border border-border shadow-sm overflow-x-auto">
+  <div class="flex flex-nowrap gap-2 min-w-max sm:flex-wrap">
 
-          <!-- Dynamic specialties (first 5 only) -->
-          {% for sp in specialties|slice:":5" %}
-          <button
-            class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors"
-          >
-            {{ sp.name }}
-          </button>
-          {% endfor %}
-        </div>
-      </div>
+    <!-- ✅ ALL button -->
+    <a href="?"
+       class="filter-link px-5 py-2 rounded-full text-sm font-medium transition-colors
+       {% if not selected_specialty %}
+          bg-primary text-white shadow-sm
+       {% else %}
+          bg-white border border-slate-300 text-slate-600 hover:bg-slate-50
+       {% endif %}">
+       All
+    </a>
+
+    <!-- ✅ Dynamic specialties -->
+    {% for sp in specialties %}
+    <a href="?specialty={{ sp.slug }}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}"
+       class="filter-link px-5 py-2 rounded-full text-sm font-medium transition-colors
+       {% if selected_specialty == sp.slug %}
+          bg-primary text-white shadow-sm
+       {% else %}
+          bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-slate-400
+       {% endif %}">
+       {{ sp.name }}
+    </a>
+    {% endfor %}
+
+  </div>
+</div>
+    </div>
+
     </div>
   </section>
 
@@ -291,145 +301,141 @@
           Showing
           <span class="font-bold text-fg">{{ total_doctors }}</span> Doctors
         </p>
-        <div class="flex items-center gap-2">
-          <span class="text-sm text-muted">Sort by:</span>
-          <select
-            class="text-sm border-none bg-transparent font-semibold text-fg focus:ring-0 cursor-pointer"
-          >
-            <option>Top Rated</option>
-            <option>Newest First</option>
-          </select>
-        </div>
+<div class="flex items-center gap-2">
+  <span class="text-sm text-muted">Sort by:</span>
+
+  <select id="sort-select"
+    class="text-sm border-none bg-transparent font-semibold text-fg focus:ring-0 cursor-pointer">
+
+    <option value="">Default</option>
+
+    <option value="top"
+      {% if selected_sort == "top" %}selected{% endif %}>
+      Top Rated
+    </option>
+
+    <option value="new"
+      {% if selected_sort == "new" %}selected{% endif %}>
+      Newest First
+    </option>
+
+  </select>
+</div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for doctor in doctors %}
-        <div
-          class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full"
-        >
-          <!-- Top -->
-          <div class="flex gap-4 mb-4">
-            <!-- Image -->
-            <img
-              src="{{ doctor.get_profile_picture_url }}"
-              alt="{{ doctor.name }}"
-              class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0"
-            />
-
-            <!-- Info -->
-            <div class="flex-1">
-              <div class="flex justify-between items-start">
-                <!-- Name -->
-                <h3 class="font-bold text-xl text-slate-900 leading-tight">
-                  {{ doctor.name }}
-                </h3>
-              </div>
-
-              <!-- Designation -->
-              <p class="text-primary font-medium text-sm">
-                {{ doctor.designation }}
-              </p>
-
-              <!-- Specialty (first one) -->
-              <p class="text-emerald-600 font-semibold text-xs mt-1">
-                {% with doctor.specialties.all|first as sp %} {{ sp.name }} {% endwith %}
-              </p>
-
-              <div
-                class="flex items-center gap-1 mt-2 text-amber-600 font-semibold text-sm"
-              >
-                ⭐
-                <span>{{ doctor.avg_rating|default:"0.0"|floatformat:1 }}</span>
-                <span class="text-xs text-slate-500"
-                  >({{ doctor.review_count }} Reviews)</span
-                >
-              </div>
-            </div>
-          </div>
-
-          <!-- Middle -->
-          <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
-            <!-- Education -->
-            <div>
-              <p
-                class="text-xs text-muted uppercase tracking-wide font-bold mb-1"
-              >
-                Education
-              </p>
-              <p class="text-sm text-slate-700 font-medium leading-snug">
-                {{ doctor.qualifications }}
-              </p>
-            </div>
-
-            <!-- Chamber -->
-            <div>
-              <p
-                class="text-xs text-muted uppercase tracking-wide font-bold mb-1"
-              >
-                Chamber
-              </p>
-              <p class="text-sm text-slate-700 font-medium">
-                {{ doctor.hospital.name }}
-              </p>
-            </div>
-          </div>
-
-          <!-- Bottom -->
-          <div class="mt-auto pt-2">
-            <p class="text-sm text-slate-600 line-clamp-2 mb-3">
-              {{ doctor.about|truncatewords:20 }}
-            </p>
-
-            <a
-              href="#"
-              class="inline-flex items-center text-primary font-bold hover:underline text-sm"
-            >
-              View Full Profile
-            </a>
-          </div>
-        </div>
-        {% empty %}
-        <p class="text-slate-500">No doctors found.</p>
-        {% endfor %}
-      </div>
+<div id="doctor-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {% include "newapp/partials/doctor_list.html" %}
+</div>
 
       <!-- Pagination -->
       <div class="mt-12 flex justify-center gap-2">
-        <!-- Previous -->
-        {% if page_obj.has_previous %}
-        <a
-          href="?page={{ page_obj.previous_page_number }}"
-          class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50"
-        >
-          Previous
-        </a>
-        {% else %}
-        <button
-          disabled
-          class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 opacity-50"
-        >
-          Previous
-        </button>
-        {% endif %}
 
-        <!-- Next -->
-        {% if page_obj.has_next %}
-        <a
-          href="?page={{ page_obj.next_page_number }}"
-          class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50"
-        >
-          Next
-        </a>
-        {% else %}
-        <button
-          disabled
-          class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 opacity-50"
-        >
-          Next
-        </button>
-        {% endif %}
-      </div>
+  <!-- ✅ Previous -->
+  {% if page_obj.has_previous %}
+  <a
+    href="?page={{ page_obj.previous_page_number }}{% if selected_specialty %}&specialty={{ selected_specialty }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}"
+    class="pagination-link px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50"
+  >
+    Previous
+  </a>
+  {% else %}
+  <button
+    disabled
+    class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 opacity-50"
+  >
+    Previous
+  </button>
+  {% endif %}
+
+  <!-- ✅ Next -->
+  {% if page_obj.has_next %}
+  <a
+    href="?page={{ page_obj.next_page_number }}{% if selected_specialty %}&specialty={{ selected_specialty }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}"
+    class="pagination-link px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50"
+  >
+    Next
+  </a>
+  {% else %}
+  <button
+    disabled
+    class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 opacity-50"
+  >
+    Next
+  </button>
+  {% endif %}
+
+</div>
+
     </div>
   </section>
 </main>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  function loadDoctors(url) {
+    fetch(url, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById("doctor-list").innerHTML = data.html;
+      window.history.pushState({}, "", url); // update URL
+    });
+  }
+
+  // 🔹 Filter click
+  document.querySelectorAll(".filter-link").forEach(link => {
+    link.addEventListener("click", function(e) {
+      e.preventDefault();
+      loadDoctors(this.href);
+    });
+  });
+
+  // 🔹 Pagination click
+document.querySelectorAll(".pagination-link").forEach(link => {
+  link.addEventListener("click", function(e) {
+    e.preventDefault();
+    window.location.href = this.href;  // ✅ full reload
+  });
+});
+
+});
+</script>
+
+<script>
+document.getElementById("sort-select").addEventListener("change", function() {
+  const selectedSort = this.value;
+
+  const url = new URL(window.location.href);
+
+  if (selectedSort) {
+    url.searchParams.set("sort", selectedSort);
+  } else {
+    url.searchParams.delete("sort");
+  }
+
+  // keep specialty filter
+  const specialty = url.searchParams.get("specialty");
+
+  // reset page
+  url.searchParams.delete("page");
+
+  // ✅ AJAX load
+  fetch(url.toString(), {
+    headers: {
+      "X-Requested-With": "XMLHttpRequest"
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("doctor-list").innerHTML = data.html;
+    window.history.pushState({}, "", url);
+  });
+});
+</script>
+{% endblock extra_js %} 

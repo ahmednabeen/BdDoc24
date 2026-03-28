@@ -10,7 +10,9 @@ from django.views.generic import DetailView
 from django.db.models import Avg, Count, Prefetch
 from django.core.paginator import Paginator
 from .models import Hospital, Doctor, Specialty
-
+from django.db.models import Avg, Count
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 
 def home_view(request):
@@ -79,6 +81,10 @@ class PrivacyPolicyView(TemplateView):
 
 
 
+from django.db.models import Avg, Count, Prefetch
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 class HospitalDoctorListView(DetailView):
     model = Hospital
@@ -96,48 +102,57 @@ class HospitalDoctorListView(DetailView):
             )
         )
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
+    def get_filtered_queryset(self):
         hospital = self.object
-
-        # --- Filtering ---
         specialty_slug = self.request.GET.get("specialty")
         sort = self.request.GET.get("sort")
 
-        doctors = hospital.doctors.all()
-
-        # Annotate rating
-        doctors = doctors.annotate(
+        doctors = hospital.doctors.all().annotate(
             avg_rating=Avg("reviews__rating"),
             review_count=Count("reviews")
         )
 
-        # Filter by specialty
         if specialty_slug:
             doctors = doctors.filter(
                 specialties__slug=specialty_slug
-            )
+            ).distinct()   # ✅ IMPORTANT
 
-        # Sorting
         if sort == "top":
             doctors = doctors.order_by("-avg_rating")
         elif sort == "new":
             doctors = doctors.order_by("-id")
 
-        # --- Pagination ---
-        paginator = Paginator(doctors, 6)  # 6 per page (matches UI)
-        page_number = self.request.GET.get("page")
+        return doctors
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        doctors = self.get_filtered_queryset()
+
+        paginator = Paginator(doctors, 1)
+        page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
 
-        # --- Context ---
-        context.update({
+        # ✅ AJAX
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            html = render_to_string(
+                "newapp/partials/doctor_list.html",
+                {"doctors": page_obj.object_list},
+                request=request
+            )
+            return JsonResponse({"html": html})
+
+        # ✅ NORMAL REQUEST (FIXED)
+        context = {
+            "hospital": self.object,
             "page_obj": page_obj,
             "doctors": page_obj.object_list,
-            "specialties": Specialty.objects.all(),
-            "selected_specialty": specialty_slug,
-            "selected_sort": sort,
-            "total_doctors": hospital.doctors.count(),
-        })
+            "specialties": Specialty.objects.filter(
+                doctor__hospital=self.object
+            ).distinct(),
+            "selected_specialty": request.GET.get("specialty"),
+            "selected_sort": request.GET.get("sort"),
+            "total_doctors": doctors.count(),  # filtered count
+        }
 
-        return context
+        return self.render_to_response(context)
