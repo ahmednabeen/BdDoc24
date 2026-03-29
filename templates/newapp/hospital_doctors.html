@@ -1,4 +1,133 @@
-{% extends 'base_new.html' %} \ {% load static %} {% block content %}
+{% extends 'base_new.html' %} 
+{% load static %} 
+{% block seo_head %}
+
+<title>
+  {{ hospital.name }} Doctors List, Specialties & Appointment Info
+</title>
+
+<meta name="description"
+content="{{ hospital.name }} has {{ total_doctors }} doctors across specialties like {% for sp in top_specialties %}{% if forloop.first %}{{ sp.name }}{% elif forloop.last %} and {{ sp.name }}{% else %}, {{ sp.name }}{% endif %}{% endfor %}. View doctor profiles, departments, and contact details." />
+
+<!-- Robots -->
+
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+<!-- Open Graph -->
+
+<meta property="og:title"
+content="{{ hospital.name }} Doctors List & Specialties" />
+
+<meta property="og:description"
+content="Explore {{ total_doctors }} doctors at {{ hospital.name }} including {% for sp in top_specialties %}{% if forloop.first %}{{ sp.name }}{% elif forloop.last %} and {{ sp.name }}{% else %}, {{ sp.name }}{% endif %}{% endfor %}." />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ request.build_absolute_uri }}" />
+
+<!-- OG Image -->
+
+{% if hospital.image %} <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ hospital.image.url }}"> <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ hospital.image.url }}">
+{% else %} <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/hospital-default-image.jpg' %}"> <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/hospital-default-image.jpg' %}">
+{% endif %}
+
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Basic meta -->
+
+<meta itemprop="name" content="{{ hospital.name }}">
+<meta itemprop="description" content="{{ hospital.name }} doctor directory">
+<link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+
+<!-- JSON-LD -->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+
+    {
+      "@type": "Hospital",
+      "@id": "{{ request.build_absolute_uri }}#hospital",
+      "name": "{{ hospital.name|escapejs }}",
+      "url": "{{ request.build_absolute_uri }}",
+
+      {% if hospital.image %}
+      "image": "{{ request.scheme }}://{{ request.get_host }}{{ hospital.image.url }}",
+      {% endif %}
+
+      {% if hospital.address or hospital.location %}
+      "address": {
+        "@type": "PostalAddress",
+        {% if hospital.address %}
+        "streetAddress": "{{ hospital.address|escapejs }}",
+        {% endif %}
+        {% if hospital.location %}
+        "addressLocality": "{{ hospital.location.name|escapejs }}",
+        {% endif %}
+        "addressCountry": "BD"
+      },
+      {% endif %}
+
+      {% if hospital.get_contact_numbers_list %}
+      "telephone": [
+        {% for num in hospital.get_contact_numbers_list %}
+          "{{ num }}"{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ]
+      {% endif %}
+    },
+
+    {
+      "@type": "ItemList",
+      "name": "Doctors at {{ hospital.name|escapejs }}",
+      "itemListElement": [
+        {% for doctor in doctors|slice:":10" %}
+        {
+          "@type": "ListItem",
+          "position": {{ forloop.counter }},
+          "item": {
+            "@type": "Physician",
+            "@id": "{{ request.build_absolute_uri }}#doctor-{{ doctor.id }}",
+            "name": "{{ doctor.name|escapejs }}"
+          }
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ]
+    },
+
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "{{ request.scheme }}://{{ request.get_host }}/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Hospitals",
+          "item": "{{ request.scheme }}://{{ request.get_host }}/hospitals/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "{{ hospital.name|escapejs }}",
+          "item": "{{ request.build_absolute_uri }}"
+        }
+      ]
+    }
+
+  ]
+}
+</script>
+
+
+
+{% endblock %}
+
+{% block content %}
 <main class="flex-grow pt-16">
   <!-- 1. Hero Section (Image Right) -->
   <section class="bg-white py-10 border-b border-border">
@@ -27,14 +156,25 @@
           <h1
             class="font-display font-bold text-3xl sm:text-4xl text-slate-900 leading-tight"
           >
-            Doctors List of {{ hospital.name }} (Updated {% now "Y" %})
+           Doctors at {{ hospital.name }}  
           </h1>
 
           <!-- Intro -->
           <p class="text-lg text-slate-600 leading-relaxed">
-            Looking for doctors at {{ hospital.name }}? Here is a complete and
-            updated list of specialist doctors, their departments,
-            qualifications, and chamber details.
+            {{ hospital.name }} has {{ total_doctors }} doctors across multiple specialties.
+            
+            {% if top_specialties %}
+              The most common specialties include
+              {% for sp in top_specialties %}
+                {% if forloop.first %}
+                  {{ sp.name }}
+                {% elif forloop.last %}
+                  and {{ sp.name }}
+                {% else %}
+                  , {{ sp.name }}
+                {% endif %}
+              {% endfor %}.
+            {% endif %}
           </p>
 
           <!-- Stats Row -->
@@ -252,7 +392,7 @@
         class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4"
       >
         <h2 class="font-display font-bold text-2xl text-slate-900">
-          All Doctors List of {{ hospital.name }}
+          {{ hospital.name }} Doctors List, Specialties & Appointment Info
         </h2>
       </div>
 
@@ -368,74 +508,14 @@
 
     </div>
   </section>
+
+  <p class="text-sm text-muted text-center mt-8 mb-6">
+  Data sourced from hospital listings and verified directories. 
+  Last reviewed: {{ hospital.updated_at|date:"F Y" }}.
+</p>
 </main>
 {% endblock content %}
 
 {% block extra_js %}
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  function loadDoctors(url) {
-    fetch(url, {
-      headers: {
-        "X-Requested-With": "XMLHttpRequest"
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      document.getElementById("doctor-list").innerHTML = data.html;
-      window.history.pushState({}, "", url); // update URL
-    });
-  }
-
-  // 🔹 Filter click
-  document.querySelectorAll(".filter-link").forEach(link => {
-    link.addEventListener("click", function(e) {
-      e.preventDefault();
-      loadDoctors(this.href);
-    });
-  });
-
-  // 🔹 Pagination click
-document.querySelectorAll(".pagination-link").forEach(link => {
-  link.addEventListener("click", function(e) {
-    e.preventDefault();
-    window.location.href = this.href;  // ✅ full reload
-  });
-});
-
-});
-</script>
-
-<script>
-document.getElementById("sort-select").addEventListener("change", function() {
-  const selectedSort = this.value;
-
-  const url = new URL(window.location.href);
-
-  if (selectedSort) {
-    url.searchParams.set("sort", selectedSort);
-  } else {
-    url.searchParams.delete("sort");
-  }
-
-  // keep specialty filter
-  const specialty = url.searchParams.get("specialty");
-
-  // reset page
-  url.searchParams.delete("page");
-
-  // ✅ AJAX load
-  fetch(url.toString(), {
-    headers: {
-      "X-Requested-With": "XMLHttpRequest"
-    }
-  })
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("doctor-list").innerHTML = data.html;
-    window.history.pushState({}, "", url);
-  });
-});
-</script>
+<script defer src="{% static 'js/hospitalDoc.js' %}"></script>
 {% endblock extra_js %} 

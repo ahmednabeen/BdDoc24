@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cardiology Doctors in Chittagong - BdDoc24</title>
+  
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Configuration (Based on your @theme definitions) -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            // Maps to --font-display and --font-body
+            display: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            body: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            // Maps to --color-primary
+            primary: { 
+              DEFAULT: '#1d4ed8', 
+              50: '#eff6ff', 
+              600: '#2563eb', 
+              700: '#1d4ed8', 
+              800: '#1e40af', 
+              900: '#1e3a8a' 
+            },
+            // Maps to --color-accent
+            accent: { 
+              DEFAULT: '#0ea5e9', 
+              light: '#e0f2fe' 
+            },
+            // Maps to --color-emerald
+            emerald: { 
+              DEFAULT: '#047857', 
+              600: '#059669', 
+              700: '#047857' 
+            },
+            // Maps to --color-bg and --color-fg
+            bg: '#f8fafc',
+            fg: '#0f172a',
+            // Maps to --color-muted, --color-card, --color-border
+            muted: '#64748b',
+            card: '#ffffff',
+            border: '#e2e8f0',
+            // Maps to --color-bccent
+            bccent: '#059669',     
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen flex flex-col bg-bg text-fg font-body selection:bg-primary selection:text-white">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-primary-900 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-700 to-emerald-900 flex items-center justify-center shadow-md">
+            <svg viewBox="0 0 128 128" class="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="M69.39 58.93c-.89 6.74 10.14 31.36-6.97 38.1c-19.16 7.56-26.31-20.55-31.39-26" stroke="#0ea5e9" stroke-width="8"/>
+               <path d="M60.42 96.03c9.59 21.97 24.29 25.08 35.15 23.19c9.54-1.67 22.17-10.22 22.14-25.72" stroke="#0ea5e9" stroke-width="8"/>
+            </svg>
+          </div>
+          <span class="font-display font-bold text-xl text-white tracking-tight">BdDoc24</span>
+        </a>
+
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#" class="text-slate-200 hover:text-white">Doctors</a>
+          <a href="#" class="text-white font-bold">Hospitals</a>
+          <a href="#" class="text-slate-200 hover:text-white">Locations</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button class="hidden sm:block">
+            <a href="#" class="px-5 py-2.5 bg-bccent text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-md">
+              For Doctors
+            </a>
+          </button>
+          <!-- Mobile Menu Button -->
+          <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg bg-primary-800 hover:bg-primary-700 text-white">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-grow pt-16">
+    
+    <!-- 1. Hero Section (Contextualized for City/Specialty) -->
+    <section class="bg-white py-10 border-b border-border">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row gap-10 items-start">
+          
+          <!-- Left: Content -->
+          <div class="lg:w-2/3 space-y-6">
+            <!-- Breadcrumbs -->
+            <nav class="flex items-center space-x-2 text-sm text-muted">
+              <a href="#" class="hover:text-primary transition-colors">Home</a>
+              <span>/</span>
+              <a href="#" class="hover:text-primary transition-colors">Chittagong</a>
+              <span>/</span>
+              <span class="text-fg font-medium">Cardiologists</span>
+            </nav>
+
+            <!-- H1 -->
+            <h1 class="font-display font-bold text-3xl sm:text-4xl text-slate-900 leading-tight">
+                Best Cardiology Doctors in Chittagong (2026)
+            </h1>
+
+            <!-- Intro -->
+            <p class="text-lg text-slate-600 leading-relaxed">
+                Connect with top-rated heart specialists and cardiac surgeons in Chittagong. Find experts for heart disease, hypertension, chest pain, and interventional cardiology procedures like angiography and angioplasty.
+            </p>
+
+            <!-- Stats Row -->
+            <div class="flex flex-wrap items-center gap-6 text-sm border-b border-slate-100 pb-6">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span class="text-muted">Specialists Found:</span>
+                    <span class="font-bold text-fg">42</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span class="text-muted">Coverage:</span>
+                    <span class="font-bold text-fg">GEC, Agrabad, Halishahar</span>
+                </div>
+            </div>
+
+            <!-- Other Information Box (Specialty Specific) -->
+            <div class="bg-red-50 p-6 rounded-xl border border-red-100">
+                <h3 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    Heart Health in Chittagong
+                </h3>
+                <p class="text-slate-700 text-sm leading-relaxed">
+                    Chittagong is home to some of the country's most advanced cardiac centers including Imperial Hospital and Mount Adora Hospital. Whether you need a routine checkup, ECG, Echo, or complex bypass surgery, you can find verified specialists here.
+                </p>
+            </div>
+          </div>
+
+          <!-- Right: Image + Emergency Info -->
+          <div class="lg:w-1/3 w-full lg:sticky lg:top-24 space-y-4">
+             <div class="relative rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+                <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80" 
+                     alt="Cardiologist examining patient" 
+                     class="w-full h-64 lg:h-72 object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                   <p class="text-white font-medium">Expert Cardiac Care</p>
+                   <p class="text-slate-200 text-sm">Modern technology, compassionate doctors.</p>
+                </div>
+             </div>
+
+             <!-- Heart Disease Warning Signs Card -->
+             <div class="bg-white p-5 rounded-xl border border-border shadow-sm">
+                 <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    When to see a Cardiologist?
+                 </h4>
+                 <ul class="text-sm text-slate-600 space-y-1 mb-3 list-disc list-inside">
+                    <li>Chest pain or discomfort</li>
+                    <li>Shortness of breath</li>
+                    <li>High blood pressure</li>
+                    <li>Family history of heart disease</li>
+                 </ul>
+                 <a href="#" class="text-xs text-primary font-semibold hover:underline flex items-center gap-1">
+                    Read Heart Health Guide
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                 </a>
+             </div>
+
+             <!-- Emergency Card -->
+             <div class="bg-white p-4 rounded-xl border border-border shadow-sm">
+                 <div class="flex items-center justify-between mb-2">
+                     <h4 class="font-bold text-slate-900 text-sm">Cardiac Emergency?</h4>
+                     <span class="text-xs text-red-500 font-bold animate-pulse">24/7 Service</span>
+                 </div>
+                 <p class="text-sm text-muted mb-3">Dial 999 for national ambulance or visit the nearest hospital ER immediately.</p>
+                 <a href="tel:999" class="block w-full text-center bg-red-50 text-red-600 font-bold py-2 rounded-lg hover:bg-red-100 transition-colors text-sm">
+                    Call Emergency: 999
+                 </a>
+             </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Filter Section -->
+    <section class="py-8 bg-bg border-b border-border">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Search Bar (Visual Only) -->
+        <div class="mb-6 max-w-lg">
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </span>
+                <input type="text" placeholder="Search by doctor name or hospital..." class="w-full py-2.5 pl-10 pr-4 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-shadow">
+            </div>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="bg-white p-4 rounded-xl border border-border shadow-sm overflow-x-auto">
+            <div class="flex flex-nowrap gap-2 min-w-max sm:flex-wrap">
+                <button class="px-5 py-2 bg-primary text-white font-medium rounded-full text-sm shadow-sm hover:bg-primary-800 transition-colors">
+                    Cardiologist
+                </button>
+                <button class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    Cardiac Surgeon
+                </button>
+                <button class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    GEC Circle
+                </button>
+                <button class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    Agrabad
+                </button>
+                <button class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    Halishahar
+                </button>
+                <button class="px-5 py-2 bg-white border border-slate-300 text-slate-600 font-medium rounded-full text-sm hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    Nasirabad
+                </button>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Doctors List Grid -->
+    <section class="pb-12 bg-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+            <p class="text-slate-600 text-sm font-medium">Showing <span class="font-bold text-fg">42</span> Cardiologists</p>
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-muted">Sort by:</span>
+                <select class="text-sm border-none bg-transparent font-semibold text-fg focus:ring-0 cursor-pointer">
+                    <option>Top Rated</option>
+                    <option>Experience: High to Low</option>
+                    <option>Consultation Fee: Low to High</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Doctor Card 1 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=200&q=80" alt="Dr. A.K.M. Fazlul Haq" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. A.K.M. Fazlul Haq</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Professor & Head</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Cardiology & Medicine</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, FCPS (Med), MD (Card), FACC (USA)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chambers</p>
+                        <p class="text-sm text-slate-700 font-medium">Chittagong Medical College Hospital & Imperial Hospital</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Prof. Haq is a pioneer in interventional cardiology in Chittagong with 25+ years of experience. Expertise in Complex Angioplasty.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Doctor Card 2 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=200&q=80" alt="Dr. Moazzem Hossain" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. Moazzem Hossain</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.8</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Senior Consultant</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Cardiac Surgeon</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, MS (CVTS), FACS</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chamber</p>
+                        <p class="text-sm text-slate-700 font-medium">Mount Adora Hospital, 2nd Floor, Agrabad</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Specializes in Open Heart Surgery (CABG), Valve Replacement, and Pediatric Cardiac Surgery.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Doctor Card 3 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=200&q=80" alt="Dr. Farzana Yesmin" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. Farzana Yesmin</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Associate Professor</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Interventional Cardiology</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, FCPS (Med), MD (Cardiology)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chamber</p>
+                        <p class="text-sm text-slate-700 font-medium">CSCR Hospital, GEC Circle & Popular Diagnostic</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Expert in treating Heart Failure, Rheumatic Heart Disease, and performing Pacemaker implantation.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Doctor Card 4 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" alt="Dr. B.J. Saha" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. B.J. Saha</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.7</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Junior Consultant</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Cardiology</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, D-CARD, FCPS (Cardiology)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chamber</p>
+                        <p class="text-sm text-slate-700 font-medium">Max Hospital & Diagnostic, Kulshi</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Dr. Saha is a dedicated cardiologist focusing on preventive cardiology and management of acute coronary syndromes.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Doctor Card 5 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=200&q=80" alt="Dr. Tanveer Ahmed" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. Tanveer Ahmed</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.8</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Consultant</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Pediatric Cardiology</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, DCH, MD (Pediatric Cardiology)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chamber</p>
+                        <p class="text-sm text-slate-700 font-medium">Chittagong Ma-O-Shishu Hospital</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Specialized in treating congenital heart defects in children (ASD, VSD, PDA) and fetal echocardiography.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Doctor Card 6 -->
+            <div class="bg-white border border-border rounded-xl p-6 hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div class="flex gap-4 mb-4">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80" alt="Dr. Nusrat Jahan" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-sm flex-shrink-0">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-xl text-slate-900 leading-tight">Dr. Nusrat Jahan</h3>
+                            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-600 font-bold text-sm">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                        <p class="text-primary font-medium text-sm">Assistant Professor</p>
+                        <p class="text-emerald-600 font-semibold text-xs mt-1">Cardiology</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 mb-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Education</p>
+                        <p class="text-sm text-slate-700 font-medium leading-snug">MBBS, FCPS (Med), MD (Cardiology)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-muted uppercase tracking-wide font-bold mb-1">Chamber</p>
+                        <p class="text-sm text-slate-700 font-medium">National Hospital & Clinic, Shahid Lane</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-2">
+                    <p class="text-sm text-slate-600 line-clamp-2 mb-3">
+                        Experienced in Echocardiography, TMT, and managing arrhythmias. Highly rated for patient communication.
+                    </p>
+                    <a href="#" class="inline-flex items-center text-primary font-bold hover:underline text-sm">
+                        View Full Profile 
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-12 flex justify-center gap-2">
+            <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 disabled:opacity-50" disabled>Previous</button>
+            <button class="px-4 py-2 bg-primary text-white rounded-lg font-medium">1</button>
+            <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50">2</button>
+            <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50">Next</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div class="col-span-2 md:col-span-1">
+          <a href="/" class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-700 to-emerald-900 flex items-center justify-center">
+               <svg viewBox="0 0 128 128" class="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M69.39 58.93c-.89 6.74 10.14 31.36-6.97 38.1c-19.16 7.56-26.31-20.55-31.39-26" stroke="#0ea5e9" stroke-width="8"/>
+               </svg>
+            </div>
+            <span class="font-display font-bold text-xl text-white">BdDoc24</span>
+          </a>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            The leading healthcare directory in Chittagong. Find the best heart specialists near you.
+          </p>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold text-white mb-4">Top Specialties</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-accent transition-colors">Cardiologists</a></li>
+            <li><a href="#" class="hover:text-accent transition-colors">Gynecologists</a></li>
+            <li><a href="#" class="hover:text-accent transition-colors">Dermatologists</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold text-white mb-4">Chittagong Areas</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-accent transition-colors">GEC Circle</a></li>
+            <li><a href="#" class="hover:text-accent transition-colors">Agrabad</a></li>
+            <li><a href="#" class="hover:text-accent transition-colors">Nasirabad</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold text-white mb-4">Company</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-accent transition-colors">About Us</a></li>
+            <li><a href="#" class="hover:text-accent transition-colors">Contact Support</a></li>
+            <li><a href="#" class="hover:text-accent transition-colors">Privacy Policy</a></li>
+          </ul>
+        </div>
+              </div>
+      
+      <div class="border-t border-slate-800 pt-8 text-center">
+        <p class="text-sm text-slate-500">© 2026 BdDoc24. All rights reserved. Chittagong Division.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        // Note: In this specific page, there isn't a mobileMenu div in HTML, 
+        // but keeping the script consistent with your request structure.
+        // If a mobile menu div is added later with id="mobileMenu", this will work.
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    });
+  </script>
+</body>
+</html>

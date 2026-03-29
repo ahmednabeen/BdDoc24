@@ -13,6 +13,10 @@ from .models import Hospital, Doctor, Specialty
 from django.db.models import Avg, Count
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.db.models import Avg, Count, Prefetch
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 
 def home_view(request):
@@ -81,10 +85,7 @@ class PrivacyPolicyView(TemplateView):
 
 
 
-from django.db.models import Avg, Count, Prefetch
-from django.core.paginator import Paginator
-from django.http import JsonResponse
-from django.template.loader import render_to_string
+
 
 class HospitalDoctorListView(DetailView):
     model = Hospital
@@ -129,7 +130,7 @@ class HospitalDoctorListView(DetailView):
 
         doctors = self.get_filtered_queryset()
 
-        paginator = Paginator(doctors, 1)
+        paginator = Paginator(doctors, 12)
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
 
@@ -141,6 +142,7 @@ class HospitalDoctorListView(DetailView):
                 request=request
             )
             return JsonResponse({"html": html})
+        top_specialties = ( Specialty.objects.filter(doctor__hospital=self.object).annotate(doc_count=Count("doctor")).order_by("-doc_count")[:3])
 
         # ✅ NORMAL REQUEST (FIXED)
         context = {
@@ -153,6 +155,102 @@ class HospitalDoctorListView(DetailView):
             "selected_specialty": request.GET.get("specialty"),
             "selected_sort": request.GET.get("sort"),
             "total_doctors": doctors.count(),  # filtered count
+            "top_specialties": top_specialties,  # ✅ ADD THIS
+
         }
 
         return self.render_to_response(context)
+    
+
+
+from django.views.generic import ListView
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
+
+from .models import Doctor, Department, Location
+
+
+class DepartmentDoctorListView(ListView):
+    model = Doctor
+    template_name = 'newapp/department_doctors.html'
+    context_object_name = 'doctors'
+    paginate_by = 1
+
+    def get_queryset(self):
+        self.department = get_object_or_404(
+            Department,
+            slug=self.kwargs.get('department_slug')
+        )
+
+        queryset = Doctor.objects.select_related('hospital', 'location') \
+                                .prefetch_related('specialties') \
+                                .filter(specialties__department=self.department)
+
+        # filters...
+        specialty_slug = self.request.GET.get('specialty')
+        if specialty_slug:
+            queryset = queryset.filter(specialties__slug=specialty_slug)
+
+        location_slug = self.request.GET.get('location')
+        if location_slug:
+            queryset = queryset.filter(location__slug=location_slug)
+
+        search_query = self.request.GET.get('q')
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query) |
+                Q(hospital__name__icontains=search_query)
+            )
+
+        # sorting...
+        sort = self.request.GET.get('sort')
+        if sort == "experience":
+            queryset = queryset.order_by('-experience_years')
+        elif sort == "name":
+            queryset = queryset.order_by('name')
+
+        # ✅ APPLY DISTINCT FIRST
+        queryset = queryset.distinct()
+
+        # ✅ THEN COUNT
+        self.total_count = queryset.count()
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Department
+        context['department'] = self.department
+
+        # Specialties under this department
+        context['specialties'] = self.department.specialties.all()
+
+        # ✅ Locations (FIXED - now will show in dropdown)
+        context['locations'] = Location.objects.all()
+
+        # Total doctors count
+        context['total_doctors'] = self.total_count
+
+        # Keep selected filters (optional but clean)
+        context['selected_specialty'] = self.request.GET.get('specialty')
+        context['selected_location'] = self.request.GET.get('location')
+        context['search_query'] = self.request.GET.get('q')
+
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            
+            html = render_to_string(
+                'newapp/partials/doctor_list.html',
+                context,
+                request=self.request
+            )
+
+            return JsonResponse({
+                'html': html,
+                'total': context['total_doctors']
+            })
+
+        return super().render_to_response(context, **response_kwargs)

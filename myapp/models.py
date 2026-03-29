@@ -2,6 +2,38 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.text import slugify
 from django.templatetags.static import static
+import re
+
+class Department(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=120, unique=True, blank=True)
+    symptoms = models.TextField(blank=True, help_text="Enter symptoms separated by commas or new lines" )
+    short_description = models.TextField(blank=True, null=True)
+    long_description = models.TextField(blank=True, null=True)
+    logo = models.ImageField(upload_to='departments/logos/', blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_symptoms_list(self):
+        if not self.symptoms:
+            return []
+        return [s.strip() for s in self.symptoms.replace(',', '\n').split('\n') if s.strip()]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            base_slug = slugify(self.name)
+            slug = base_slug
+            counter = 1
+
+            while Department.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = slug
+
+        super().save(*args, **kwargs)
 
 
 
@@ -21,6 +53,7 @@ class Location(models.Model):
 class Specialty(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True, blank=True)
+    department = models.ForeignKey( Department, on_delete=models.SET_NULL,  null=True, blank=True, related_name="specialties")
 
     def __str__(self):
         return self.name
@@ -38,7 +71,7 @@ class Specialty(models.Model):
 
 class Hospital(models.Model):
     name = models.CharField(max_length=200)
-    slug = models.SlugField(blank=True, null=True, max_length=255,)
+    slug = models.SlugField(unique=True, max_length=255,)
     location = models.ForeignKey(Location, on_delete=models.SET_NULL,null=True, blank=True)
     address = models.TextField(blank=True, null=True)
     contact_numbers = models.TextField(
@@ -51,22 +84,22 @@ class Hospital(models.Model):
     image = models.ImageField(upload_to='records/images/', blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     about = models.TextField(blank=True, null=True)
+    index_status = models.BooleanField(default=False,help_text="Allow search engines to index this page")
 
 
     def get_contact_numbers_list(self):
         if not self.contact_numbers:
             return []
-        return [num.strip() for num in self.contact_numbers.split(",")]
+        return [num.strip() for num in re.split(r"[;,]", self.contact_numbers) if num.strip()]
     
     def get_facilities_list(self):
         if not self.facilities:
             return []
         return [item.strip() for item in self.facilities.split("\n") if item.strip()]
 
-    
-
     def __str__(self):
         return self.name
+
 
 class Doctor(models.Model):
     name = models.CharField(max_length=100)
@@ -77,8 +110,8 @@ class Doctor(models.Model):
     experience_years = models.PositiveIntegerField(null=True, blank=True)
     about = models.TextField()
     specialties = models.ManyToManyField(Specialty,null=True, blank=True)
-    hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True, blank=True,related_name="doctors",)
-    slug = models.SlugField(max_length=255,  unique=True, blank=True, help_text="Unique URL-friendly identifier for the doctor.")
+    hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True, blank=True, related_name='doctors',)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, help_text="Unique URL-friendly identifier for the doctor.")
 
 
     def __str__(self):

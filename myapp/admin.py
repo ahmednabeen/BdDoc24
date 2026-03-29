@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Doctor, Specialty, Hospital, Experience, Review, Location
-
+from .models import *
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
@@ -8,6 +7,12 @@ class LocationAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     prepopulated_fields = {"slug": ("name",)}
 
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug')
+    search_fields = ('name', 'symptoms')
+    prepopulated_fields = {"slug": ("name",)}
 
 
 @admin.register(Specialty)
@@ -23,6 +28,7 @@ class HospitalAdmin(admin.ModelAdmin):
     list_display = ('name', 'location', )
     search_fields = ('name', 'location',)
     list_filter = ('location',)
+    ordering = ('updated_at',) 
 
 class ExperienceInline(admin.TabularInline):
     """
